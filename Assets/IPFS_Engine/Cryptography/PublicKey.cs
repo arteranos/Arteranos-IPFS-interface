@@ -93,7 +93,7 @@ namespace Ipfs.Cryptography.Proto
                 throw new InvalidDataException("Data does not match the signature.");
         }
 
-#if false
+#if true
         /// <summary>
         /// Do the publickey-to-ID according to
         /// https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#encoding

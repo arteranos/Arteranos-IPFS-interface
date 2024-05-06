@@ -3,9 +3,11 @@ using System.Collections;
 using UnityEngine.TestTools;
 
 using UnityEngine;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+
+using Debug = UnityEngine.Debug;
+using System.Net;
 
 namespace Ipfs.Http
 {
@@ -42,6 +44,22 @@ namespace Ipfs.Http
             yield return Utils.Async2Coroutine(ipfs.Routing.FindProvidersAsync(Utils.sample_Dir, providerFound: FoundPeer), _peers => peers = _peers.ToList());
             Assert.IsNotNull(peers);
             Assert.IsTrue(peers.Count() > 0);
+        }
+
+        [UnityTest]
+        public IEnumerator FindPeerAddresses()
+        {
+            var ipfs = new IpfsClientEx();
+            Assert.IsNotNull(ipfs);
+
+            IEnumerable<IPAddress> ipAddresses = null;
+            yield return Utils.Async2Coroutine(ipfs.Routing.FindPeerAddressesAsync(Utils.sample_LANPeer), addrs => ipAddresses = addrs);
+            Assert.IsNotNull(ipAddresses);
+
+            Assert.IsTrue(ipAddresses.Any());
+            foreach (IPAddress addr in ipAddresses)
+                Debug.Log(addr);
+
         }
     }
 }

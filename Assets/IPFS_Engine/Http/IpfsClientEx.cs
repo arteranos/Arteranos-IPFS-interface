@@ -1,10 +1,8 @@
-using Ipfs.CoreApi;
 using Ipfs.ExtendedApi;
-using System.Linq.Expressions;
 
 namespace Ipfs.Http
 {
-    public class IpfsClientEx : IpfsClient
+    public partial class IpfsClientEx : IpfsClient
     {
         public IpfsClientEx() : base() 
         { 

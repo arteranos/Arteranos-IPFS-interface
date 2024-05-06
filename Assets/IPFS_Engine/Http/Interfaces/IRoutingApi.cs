@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,7 +9,6 @@ namespace Ipfs.ExtendedApi
     /// <summary>
     ///   Some miscellaneous methods.
     /// </summary>
-    /// <seealso href="https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md">Generic API spec</seealso>
     public interface IRoutingApi
     {
         /// <summary>
@@ -48,7 +48,21 @@ namespace Ipfs.ExtendedApi
         Task<IEnumerable<Peer>> FindProvidersAsync(
             Cid id,
             int limit = 20,
-            Action<Peer>? providerFound = null,
+            Action<Peer> providerFound = null,
             CancellationToken cancel = default);
+
+        /// <summary>
+        ///   Find the (reachable) IP Addresses of the specified peer, to use the same node for connecting to other services
+        /// </summary>
+        /// <param name="id">
+        ///   The <see cref="MultiHash"/> of the peer
+        /// </param>
+        /// <param name="cancel">
+        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
+        /// </param>
+        /// <returns>
+        ///   Filtered list of <see cref="IPAddress"/> to reach the peer
+        /// </returns>
+        Task<IEnumerable<IPAddress>> FindPeerAddressesAsync(MultiHash id, CancellationToken cancel = default);
     }
 }

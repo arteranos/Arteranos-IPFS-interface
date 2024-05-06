@@ -4,6 +4,9 @@ using UnityEngine.TestTools;
 
 using UnityEngine;
 using Newtonsoft.Json.Linq;
+using Ipfs.Cryptography.Proto;
+using Ipfs.Cryptography;
+using System.IO;
 
 namespace Ipfs.Http
 {
@@ -37,5 +40,36 @@ namespace Ipfs.Http
             Assert.IsNotNull(IdString);
             Debug.Log(IdString);
         }
+
+        [UnityTest]
+        public IEnumerator ReadDaemonPrivateKey()
+        {
+            var ipfs = new IpfsClientEx();
+            Assert.IsNotNull(ipfs);
+
+            PrivateKey pk = ipfs.ReadDaemonPrivateKey();
+            Assert.IsNotNull(pk);
+
+            bool success = false;
+            yield return Utils.Async2Coroutine(ipfs.VerifyDaemonAsync(pk), _r => success = _r);
+            Assert.True(success);
+        }
+
+        [UnityTest]
+        public IEnumerator ReadDaemonPrivateKey_Negative()
+        {
+            var ipfs = new IpfsClientEx();
+            Assert.IsNotNull(ipfs);
+
+            KeyPair kp = KeyPair.Generate("ed25519");
+            PrivateKey pk = kp;
+
+            Assert.IsNotNull(pk);
+
+            bool success = false;
+            yield return Utils.Async2Coroutine(ipfs.VerifyDaemonAsync(pk), _r => success = _r);
+            Assert.False(success);
+        }
+
     }
 }
