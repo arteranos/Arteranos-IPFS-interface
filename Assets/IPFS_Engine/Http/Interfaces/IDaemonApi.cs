@@ -31,6 +31,6 @@ namespace Ipfs.ExtendedApi
         ///   Is used to stop the task. When cancelled, the <see cref="TaskCanceledException"/> is NOT raised.
         /// </param>
         /// <returns>Throws an exception if the peer ID wouldn't match</returns>
-        Task<bool> VerifyDaemonAsync(PrivateKey privateKey, CancellationToken cancel = default(CancellationToken));
+        Task VerifyDaemonAsync(PrivateKey privateKey, CancellationToken cancel = default(CancellationToken));
     }
 }

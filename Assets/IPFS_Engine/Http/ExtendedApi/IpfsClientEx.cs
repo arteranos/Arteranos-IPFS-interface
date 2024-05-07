@@ -4,7 +4,6 @@ using Ipfs.ExtendedApi;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,14 +34,15 @@ namespace Ipfs.Http
             return PrivateKey.Deserialize(keyData);
         }
 
-        public async Task<bool> VerifyDaemonAsync(PrivateKey privateKey, CancellationToken cancel = default)
+        public async Task VerifyDaemonAsync(PrivateKey privateKey, CancellationToken cancel = default)
         {
             Peer self = await ipfs.IdAsync(cancel: cancel);
 
             KeyPair kp = KeyPair.Import(privateKey);
             PublicKey publicKey = kp;
 
-            return (publicKey.ToId() == self.Id);
+            if (publicKey.ToId() != self.Id)
+                throw new InvalidDataException("Daemon doen't match this private key");
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.TestTools;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using Ipfs.Unity;
 
 namespace Ipfs.Http
 {
@@ -18,7 +19,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs);
 
             Stream s = null;
-            yield return Utils.Async2Coroutine(ipfs.FileSystem.GetAsync(Utils.sample_Dir), _s => s = _s);
+            yield return Asyncs.Async2Coroutine(ipfs.FileSystem.GetAsync(Utils.sample_Dir), _s => s = _s);
             Assert.IsNotNull(s);
             byte[] buffer = new byte[1024];
             int n = 0;
@@ -40,7 +41,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs);
 
             Stream s = null;
-            yield return Utils.Async2Coroutine(ipfs.FileSystem.ReadFileAsync(Utils.sample_File), _s => s = _s);
+            yield return Asyncs.Async2Coroutine(ipfs.FileSystem.ReadFileAsync(Utils.sample_File), _s => s = _s);
             Assert.IsNotNull(s);
             StreamReader sr = new(s);
 

@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using Ipfs.Cryptography.Proto;
 using Ipfs.Cryptography;
 using System.IO;
+using Ipfs.Unity;
+using System;
 
 namespace Ipfs.Http
 {
@@ -18,9 +20,9 @@ namespace Ipfs.Http
         {
             var ipfs = new IpfsClientEx();
             Assert.IsNotNull(ipfs);
-
+            
             CoreApi.BitswapData data = null;
-            yield return Utils.Async2Coroutine(ipfs.Stats.BitswapAsync(), _data => data = _data);
+            yield return Asyncs.Async2Coroutine(ipfs.Stats.BitswapAsync(), _data => data = _data);
 
             Assert.IsNotNull(data.Peers);
 
@@ -35,7 +37,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs);
 
             JToken IdString = null;
-            yield return Utils.Async2Coroutine(ipfs.Config.GetAsync("Identity.PeerID"), _r => IdString = _r);
+            yield return Asyncs.Async2Coroutine(ipfs.Config.GetAsync("Identity.PeerID"), _r => IdString = _r);
 
             Assert.IsNotNull(IdString);
             Debug.Log(IdString);
@@ -50,9 +52,7 @@ namespace Ipfs.Http
             PrivateKey pk = ipfs.ReadDaemonPrivateKey();
             Assert.IsNotNull(pk);
 
-            bool success = false;
-            yield return Utils.Async2Coroutine(ipfs.VerifyDaemonAsync(pk), _r => success = _r);
-            Assert.True(success);
+            yield return Asyncs.Async2Coroutine(ipfs.VerifyDaemonAsync(pk));
         }
 
         [UnityTest]
@@ -66,10 +66,9 @@ namespace Ipfs.Http
 
             Assert.IsNotNull(pk);
 
-            bool success = false;
-            yield return Utils.Async2Coroutine(ipfs.VerifyDaemonAsync(pk), _r => success = _r);
-            Assert.False(success);
+            Exception e = null;
+            yield return Asyncs.Async2Coroutine(ipfs.VerifyDaemonAsync(pk), _e => e = _e);
+            Assert.Throws<InvalidDataException>(() => throw e);
         }
-
     }
 }

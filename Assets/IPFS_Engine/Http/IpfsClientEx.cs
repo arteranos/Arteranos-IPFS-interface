@@ -17,9 +17,12 @@ namespace Ipfs.Http
         private void InitEx() 
         {
             Routing = new RoutingApi(this);
+            NameEx = new NameExApi(this);
         }
 
         public IRoutingApi Routing { get; private set; }
+
+        public INameExApi NameEx { get; private set; }
 
     }
 }

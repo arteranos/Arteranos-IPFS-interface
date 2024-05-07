@@ -1,11 +1,9 @@
 {
-    "name": "tests.ipfs.Http",
+    "name": "tests.ipfs.Unity",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ipfs.Http",
-        "ipfs.Cryptography",
         "ipfs.Unity"
     ],
     "includePlatforms": [
@@ -17,8 +15,6 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "SimpleBase.dll",
-        "IpfsShipyard.Ipfs.Http.Client.dll",
-        "IpfsShipyard.Ipfs.Core.dll",
         "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,

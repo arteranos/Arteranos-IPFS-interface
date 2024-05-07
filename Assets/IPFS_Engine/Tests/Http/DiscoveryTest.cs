@@ -9,6 +9,8 @@ using System.Linq;
 using Debug = UnityEngine.Debug;
 using System.Net;
 
+using Ipfs.Unity;
+
 namespace Ipfs.Http
 {
     [TestFixture]
@@ -21,7 +23,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs);
 
             Peer peer = null;
-            yield return Utils.Async2Coroutine(ipfs.IdAsync(), _peer => peer = _peer);
+            yield return Asyncs.Async2Coroutine(ipfs.IdAsync(), _peer => peer = _peer);
             Assert.IsNotNull(peer);
 
             foreach(MultiAddress multiAddress in peer.Addresses)
@@ -41,7 +43,7 @@ namespace Ipfs.Http
 
             // yield vs. async clash!
             List<Peer> peers = null;
-            yield return Utils.Async2Coroutine(ipfs.Routing.FindProvidersAsync(Utils.sample_Dir, providerFound: FoundPeer), _peers => peers = _peers.ToList());
+            yield return Asyncs.Async2Coroutine(ipfs.Routing.FindProvidersAsync(Utils.sample_Dir, providerFound: FoundPeer), _peers => peers = _peers.ToList());
             Assert.IsNotNull(peers);
             Assert.IsTrue(peers.Count() > 0);
         }
@@ -53,7 +55,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs);
 
             IEnumerable<IPAddress> ipAddresses = null;
-            yield return Utils.Async2Coroutine(ipfs.Routing.FindPeerAddressesAsync(Utils.sample_LANPeer), addrs => ipAddresses = addrs);
+            yield return Asyncs.Async2Coroutine(ipfs.Routing.FindPeerAddressesAsync(Utils.sample_LANPeer), addrs => ipAddresses = addrs);
             Assert.IsNotNull(ipAddresses);
 
             Assert.IsTrue(ipAddresses.Any());
