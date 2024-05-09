@@ -13,32 +13,47 @@ namespace Ipfs.Http
     [TestFixture]
     public class FileSystemApiTest
     {
-        [Test]
-        public void AddText()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddText()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(AddText());
+        }
+
+        public async Task AddText()
         {
             var ipfs = TestFixture.Ipfs;
-            var result = ipfs.FileSystem.AddTextAsync("hello world").Result;
+            var result = await ipfs.FileSystem.AddTextAsync("hello world");
             Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)result.Id);
         }
 
-        [Test]
-        public void ReadText()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_ReadText()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(ReadText());
+        }
+
+        public async Task ReadText()
         {
             var ipfs = TestFixture.Ipfs;
-            var node = ipfs.FileSystem.AddTextAsync("hello world").Result;
-            var text = ipfs.FileSystem.ReadAllTextAsync(node.Id).Result;
+            var node = await ipfs.FileSystem.AddTextAsync("hello world");
+            var text = await ipfs.FileSystem.ReadAllTextAsync(node.Id);
             Assert.AreEqual("hello world", text);
         }
 
-        [Test]
-        public void AddFile()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddFile()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(AddFile());
+        }
+
+        public async Task AddFile()
         {
             var path = Path.GetTempFileName();
             File.WriteAllText(path, "hello world");
             try
             {
                 var ipfs = TestFixture.Ipfs;
-                var result = ipfs.FileSystem.AddFileAsync(path).Result;
+                var result = await ipfs.FileSystem.AddFileAsync(path);
                 Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)result.Id);
                 Assert.AreEqual(0, result.Links.Count());
             }
@@ -48,12 +63,17 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
-        public void Read_With_Offset()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Read_With_Offset()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset());
+        }
+
+        public async Task Read_With_Offset()
         {
             var ipfs = TestFixture.Ipfs;
             var indata = new MemoryStream(new byte[] { 10, 20, 30 });
-            var node = ipfs.FileSystem.AddAsync(indata).Result;
+            var node = await ipfs.FileSystem.AddAsync(indata);
             using (var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1).Result)
             {
                 Assert.AreEqual(20, outdata.ReadByte());
@@ -62,12 +82,17 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
-        public void Read_With_Offset_Length_1()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Read_With_Offset_Length_1()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset_Length_1());
+        }
+
+        public async Task Read_With_Offset_Length_1()
         {
             var ipfs = TestFixture.Ipfs;
             var indata = new MemoryStream(new byte[] { 10, 20, 30 });
-            var node = ipfs.FileSystem.AddAsync(indata).Result;
+            var node = await ipfs.FileSystem.AddAsync(indata);
             using (var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 1).Result)
             {
                 Assert.AreEqual(20, outdata.ReadByte());
@@ -75,12 +100,17 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
-        public void Read_With_Offset_Length_2()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Read_With_Offset_Length_2()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset_Length_2());
+        }
+
+        public async Task Read_With_Offset_Length_2()
         {
             var ipfs = TestFixture.Ipfs;
             var indata = new MemoryStream(new byte[] { 10, 20, 30 });
-            var node = ipfs.FileSystem.AddAsync(indata).Result;
+            var node = await ipfs.FileSystem.AddAsync(indata);
             using (var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 2).Result)
             {
                 Assert.AreEqual(20, outdata.ReadByte());
@@ -89,14 +119,19 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
-        public void Add_NoPin()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_NoPin()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_NoPin());
+        }
+
+        public async Task Add_NoPin()
         {
             var ipfs = TestFixture.Ipfs;
             var data = new MemoryStream(new byte[] { 11, 22, 33 });
             var options = new AddFileOptions { Pin = false };
-            var node = ipfs.FileSystem.AddAsync(data, "", options).Result;
-            var pins = ipfs.Pin.ListAsync().Result;
+            var node = await ipfs.FileSystem.AddAsync(data, "", options);
+            var pins = await ipfs.Pin.ListAsync();
             Assert.IsFalse(pins.Any(pin => pin == node.Id));
         }
 
@@ -209,14 +244,19 @@ namespace Ipfs.Http
             Assert.AreEqual("hello world", text);
         }
 
-        [Test]
-        public void AddDirectory()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddDirectory()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(AddDirectory());
+        }
+
+        public async Task AddDirectory()
         {
             var ipfs = TestFixture.Ipfs;
             var temp = MakeTemp();
             try
             {
-                var dir = ipfs.FileSystem.AddDirectoryAsync(temp, false).Result;
+                var dir = await ipfs.FileSystem.AddDirectoryAsync(temp, false);
                 Assert.IsTrue(dir.IsDirectory);
 
                 var files = dir.Links.ToArray();
@@ -236,14 +276,19 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
-        public void AddDirectoryRecursive()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddDirectoryRecursive()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(AddDirectoryRecursive());
+        }
+
+        public async Task AddDirectoryRecursive()
         {
             var ipfs = TestFixture.Ipfs;
             var temp = MakeTemp();
             try
             {
-                var dir = ipfs.FileSystem.AddDirectoryAsync(temp, true).Result;
+                var dir = await ipfs.FileSystem.AddDirectoryAsync(temp, true);
                 Assert.IsTrue(dir.IsDirectory);
 
                 var files = dir.Links.ToArray();
@@ -295,7 +340,7 @@ namespace Ipfs.Http
             Directory.CreateDirectory(temp);
             try
             {
-                var dir = ipfs.FileSystem.AddDirectoryAsync(temp, true).Result;
+                var dir = await ipfs.FileSystem.AddDirectoryAsync(temp, true);
                 var dirid = dir.Id.Encode();
 
                 using (var tar = await ipfs.FileSystem.GetAsync(dir.Id))

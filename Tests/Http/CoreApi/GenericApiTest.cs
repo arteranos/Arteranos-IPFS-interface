@@ -34,11 +34,16 @@ namespace Ipfs.Http
             Assert.IsNotNull(mars);
         }
 
-        [Test]
-        public void Version_Info()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Version_Info()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Version_Info());
+        }
+
+        public async Task Version_Info()
         {
             var ipfs = TestFixture.Ipfs;
-            var versions = ipfs.VersionAsync().Result;
+            var versions = await ipfs.VersionAsync();
             Assert.IsNotNull(versions);
             Assert.IsTrue(versions.ContainsKey("Version"));
             Assert.IsTrue(versions.ContainsKey("Repo"));
