@@ -15,7 +15,12 @@ namespace Ipfs.Http
             public string Last { get; set; }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_PutAndGet_JSON()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(PutAndGet_JSON());
+        }
+
         public async Task PutAndGet_JSON()
         {
             var ipfs = TestFixture.Ipfs;
@@ -34,7 +39,12 @@ namespace Ipfs.Http
             Assert.AreEqual(expected["a"], value);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_PutAndGet_POCO()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(PutAndGet_POCO());
+        }
+
         public async Task PutAndGet_POCO()
         {
             var ipfs = TestFixture.Ipfs;

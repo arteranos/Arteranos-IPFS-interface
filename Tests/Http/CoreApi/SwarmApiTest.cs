@@ -9,7 +9,12 @@ namespace Ipfs.Http
     [TestFixture]
     public class SwarmApiTest
     {
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Addresses()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Addresses());
+        }
+
         public async Task Addresses()
         {
             var ipfs = TestFixture.Ipfs;
@@ -22,7 +27,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Peers()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Peers());
+        }
+
         public async Task Peers()
         {
             var ipfs = TestFixture.Ipfs;
@@ -35,7 +45,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Peers_Info()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Peers_Info());
+        }
+
         public async Task Peers_Info()
         {
             var ipfs = TestFixture.Ipfs;
@@ -51,7 +66,12 @@ namespace Ipfs.Http
                 }));
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Connection()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Connection());
+        }
+
         public async Task Connection()
         {
             var ipfs = TestFixture.Ipfs;
@@ -75,7 +95,12 @@ namespace Ipfs.Http
             Assert.Fail("Cannot connect to any peer");
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Filter_Add_Remove()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Filter_Add_Remove());
+        }
+
         public async Task Filter_Add_Remove()
         {
             var ipfs = TestFixture.Ipfs;
@@ -97,7 +122,12 @@ namespace Ipfs.Http
             Assert.IsFalse(filters.Any(a => a == somewhere));
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Filter_List()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Filter_List());
+        }
+
         public async Task Filter_List()
         {
             var ipfs = TestFixture.Ipfs;
@@ -105,7 +135,12 @@ namespace Ipfs.Http
             Assert.IsNotNull(filters);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Filter_Remove_Unknown()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Filter_Remove_Unknown());
+        }
+
         public async Task Filter_Remove_Unknown()
         {
             var ipfs = TestFixture.Ipfs;

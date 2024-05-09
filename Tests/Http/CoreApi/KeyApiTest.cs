@@ -16,7 +16,12 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs.Key);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Self_Key_Exists()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Self_Key_Exists());
+        }
+
         public async Task Self_Key_Exists()
         {
             IpfsClient ipfs = TestFixture.Ipfs;
@@ -28,7 +33,12 @@ namespace Ipfs.Http
             Assert.AreEqual(me.Id, self.Id);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Create_RSA_Key()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Create_RSA_Key());
+        }
+
         public async Task Create_RSA_Key()
         {
             var name = "net-api-test-create";
@@ -51,7 +61,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Remove_Key()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Remove_Key());
+        }
+
         public async Task Remove_Key()
         {
             var name = "net-api-test-remove";
@@ -70,7 +85,12 @@ namespace Ipfs.Http
             Assert.IsFalse(keys.Any(k => k.Name == name));
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Rename_Key()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Rename_Key());
+        }
+
         public async Task Rename_Key()
         {
             var oname = "net-api-test-rename1";

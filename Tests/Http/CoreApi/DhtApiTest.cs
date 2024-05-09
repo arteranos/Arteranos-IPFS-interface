@@ -12,7 +12,12 @@ namespace Ipfs.Http
     {
         private const string helloWorldID = "QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o";
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_FindPeer()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(FindPeer());
+        }
+
         public async Task FindPeer()
         {
             var ipfs = TestFixture.Ipfs;
@@ -21,7 +26,12 @@ namespace Ipfs.Http
             Assert.IsNotNull(mars);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_FindProviders()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(FindProviders());
+        }
+
         public async Task FindProviders()
         {
             var ipfs = TestFixture.Ipfs;

@@ -100,7 +100,12 @@ namespace Ipfs.Http
             Assert.IsFalse(pins.Any(pin => pin == node.Id));
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_Wrap()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_Wrap());
+        }
+
         public async Task Add_Wrap()
         {
             var path = "hello.txt";
@@ -125,7 +130,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_SizeChunking()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_SizeChunking());
+        }
+
         public async Task Add_SizeChunking()
         {
             var ipfs = TestFixture.Ipfs;
@@ -149,7 +159,12 @@ namespace Ipfs.Http
             Assert.AreEqual("hello world", text);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_Raw()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_Raw());
+        }
+
         public async Task Add_Raw()
         {
             var ipfs = TestFixture.Ipfs;
@@ -165,7 +180,12 @@ namespace Ipfs.Http
             Assert.AreEqual("hello world", text);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_RawAndChunked()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_RawAndChunked());
+        }
+
         public async Task Add_RawAndChunked()
         {
             var ipfs = TestFixture.Ipfs;
@@ -262,7 +282,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_GetTar_EmptyDirectory()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(GetTar_EmptyDirectory());
+        }
+
         public async Task GetTar_EmptyDirectory()
         {
             var ipfs = TestFixture.Ipfs;
@@ -293,7 +318,12 @@ namespace Ipfs.Http
         }
 
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddFile_WithProgress()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(AddFile_WithProgress());
+        }
+
         public async Task AddFile_WithProgress()
         {
             var path = Path.GetTempFileName();

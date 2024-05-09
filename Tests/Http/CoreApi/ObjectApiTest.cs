@@ -12,14 +12,24 @@ namespace Ipfs.Http
     {
         private IpfsClient ipfs = TestFixture.Ipfs;
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_New_Template_Null()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(New_Template_Null());
+        }
+
         public async Task New_Template_Null()
         {
             var node = await ipfs.Object.NewAsync();
             Assert.AreEqual("QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n", (string)node.Id);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_New_Template_UnixfsDir()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(New_Template_UnixfsDir());
+        }
+
         public async Task New_Template_UnixfsDir()
         {
             var node = await ipfs.Object.NewAsync("unixfs-dir");
@@ -30,7 +40,12 @@ namespace Ipfs.Http
 
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Put_Get_Dag()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Put_Get_Dag());
+        }
+
         public async Task Put_Get_Dag()
         {
             var adata = Encoding.UTF8.GetBytes("alpha");
@@ -46,7 +61,12 @@ namespace Ipfs.Http
             Assert.AreEqual(beta.Links.First().Size, node.Links.First().Size);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Put_Get_Data()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Put_Get_Data());
+        }
+
         public async Task Put_Get_Data()
         {
             var adata = Encoding.UTF8.GetBytes("alpha");
@@ -61,7 +81,12 @@ namespace Ipfs.Http
             Assert.AreEqual(beta.Links.First().Size, node.Links.First().Size);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Data()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Data());
+        }
+
         public async Task Data()
         {
             var adata = Encoding.UTF8.GetBytes("alpha");
@@ -74,7 +99,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Links()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Links());
+        }
+
         public async Task Links()
         {
             var adata = Encoding.UTF8.GetBytes("alpha");
@@ -88,7 +118,12 @@ namespace Ipfs.Http
             Assert.AreEqual(beta.Links.First().Size, links.First().Size);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Stat()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Stat());
+        }
+
         public async Task Stat()
         {
             var data1 = Encoding.UTF8.GetBytes("Some data 1");
@@ -104,7 +139,12 @@ namespace Ipfs.Http
             Assert.AreEqual(77, info.CumulativeSize);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Get_Nonexistent()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Get_Nonexistent());
+        }
+
         public async Task Get_Nonexistent()
         {
             var data = Encoding.UTF8.GetBytes("Some data for net-ipfs-http-client-test that cannot be found");

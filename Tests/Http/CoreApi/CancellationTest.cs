@@ -8,7 +8,12 @@ namespace Ipfs.Http
     [TestFixture]
     public class CancellationTest
     {
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Cancel_Operation()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Cancel_Operation());
+        }
+
         public async Task Cancel_Operation()
         {
             var ipfs = TestFixture.Ipfs;

@@ -8,15 +8,25 @@ namespace Ipfs.Http
     [TestFixture]
     public class GenericApiTest
     {
-        [Test]
-        public void Local_Node_Info()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Local_Node_Info()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Local_Node_Info());
+        }
+
+        public async Task Local_Node_Info()
         {
             var ipfs = TestFixture.Ipfs;
-            var node = ipfs.IdAsync().Result;
+            var node = await ipfs.IdAsync();
             Assert.IsInstanceOf(typeof(Peer), node);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Peer_Node_Info()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Peer_Node_Info());
+        }
+
         public async Task Peer_Node_Info()
         {
             var ipfs = TestFixture.Ipfs;
@@ -34,15 +44,25 @@ namespace Ipfs.Http
             Assert.IsTrue(versions.ContainsKey("Repo"));
         }
 
-        [Test]
-        public void Resolve()
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Resolve()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Resolve());
+        }
+
+        public async Task Resolve()
         {
             var ipfs = TestFixture.Ipfs;
-            var path = ipfs.ResolveAsync("QmYNQJoKGNHTpPxCBPh9KkDpaExgd2duMa3aF6ytMpHdao").Result;
+            var path = await ipfs.ResolveAsync("QmYNQJoKGNHTpPxCBPh9KkDpaExgd2duMa3aF6ytMpHdao");
             Assert.AreEqual("/ipfs/QmYNQJoKGNHTpPxCBPh9KkDpaExgd2duMa3aF6ytMpHdao", path);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Ping_Peer()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Ping_Peer());
+        }
+
         public async Task Ping_Peer()
         {
             var ipfs = TestFixture.Ipfs;
@@ -52,7 +72,12 @@ namespace Ipfs.Http
             Assert.AreNotEqual(0, actual.Count());
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Ping_Address()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Ping_Address());
+        }
+
         public async Task Ping_Address()
         {
             var ipfs = TestFixture.Ipfs;

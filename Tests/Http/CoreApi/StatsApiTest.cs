@@ -8,7 +8,12 @@ namespace Ipfs.Http
     public class StatsApiTest
     {
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_SmokeTest()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(SmokeTest());
+        }
+
         public async Task SmokeTest()
         {
             var ipfs = TestFixture.Ipfs;

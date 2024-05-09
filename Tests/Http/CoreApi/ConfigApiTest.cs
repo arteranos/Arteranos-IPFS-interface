@@ -67,7 +67,12 @@ namespace Ipfs.Http
             Assert.AreEqual("http://example.io", ipfs.Config.GetAsync(key).Result[0]);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Replace_Entire_Config()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Replace_Entire_Config());
+        }
+
         public async Task Replace_Entire_Config()
         {
             IpfsClient ipfs = TestFixture.Ipfs;

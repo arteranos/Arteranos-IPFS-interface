@@ -19,7 +19,12 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs.PubSub);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Peers()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Peers());
+        }
+
         public async Task Peers()
         {
             var ipfs = TestFixture.Ipfs;
@@ -46,7 +51,12 @@ namespace Ipfs.Http
             Assert.AreEqual(0, peers.Length);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Subscribed_Topics()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Subscribed_Topics());
+        }
+
         public async Task Subscribed_Topics()
         {
             var ipfs = TestFixture.Ipfs;
@@ -67,7 +77,12 @@ namespace Ipfs.Http
 
         volatile int messageCount = 0;
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Subscribe()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Subscribe());
+        }
+
         public async Task Subscribe()
         {
             messageCount = 0;
@@ -91,7 +106,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Subscribe_Mutiple_Messages()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Subscribe_Mutiple_Messages());
+        }
+
         public async Task Subscribe_Mutiple_Messages()
         {
             messageCount = 0;
@@ -119,7 +139,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Multiple_Subscribe_Multiple_Messages()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Multiple_Subscribe_Multiple_Messages());
+        }
+
         public async Task Multiple_Subscribe_Multiple_Messages()
         {
             messageCount = 0;
@@ -151,7 +176,12 @@ namespace Ipfs.Http
 
         volatile int messageCount1 = 0;
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Unsubscribe()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Unsubscribe());
+        }
+
         public async Task Unsubscribe()
         {
             messageCount1 = 0;
@@ -172,7 +202,12 @@ namespace Ipfs.Http
             Assert.AreEqual(1, messageCount1);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Subscribe_BinaryMessage()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Subscribe_BinaryMessage());
+        }
+
         public async Task Subscribe_BinaryMessage()
         {
             var messages = new List<IPublishedMessage>();
@@ -198,7 +233,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Subscribe_StreamMessage()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Subscribe_StreamMessage());
+        }
+
         public async Task Subscribe_StreamMessage()
         {
             var messages = new List<IPublishedMessage>();

@@ -17,7 +17,12 @@ namespace Ipfs.Http
             Assert.IsTrue(pins.Count() > 0);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_Remove()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_Remove());
+        }
+
         public async Task Add_Remove()
         {
             var ipfs = TestFixture.Ipfs;

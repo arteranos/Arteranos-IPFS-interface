@@ -11,7 +11,12 @@ namespace Ipfs.Http
         IpfsClient ipfs = TestFixture.Ipfs;
         MultiAddress somewhere = "/ip4/127.0.0.1/tcp/4009/ipfs/QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_Remove()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_Remove());
+        }
+
         public async Task Add_Remove()
         {
             var addr = await ipfs.Bootstrap.AddAsync(somewhere);
@@ -27,7 +32,12 @@ namespace Ipfs.Http
             Assert.IsFalse(addrs.Any(a => a == somewhere));
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_List()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(List());
+        }
+
         public async Task List()
         {
             var addrs = await ipfs.Bootstrap.ListAsync();
@@ -35,7 +45,12 @@ namespace Ipfs.Http
             Assert.AreNotEqual(0, addrs.Count());
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Remove_All()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Remove_All());
+        }
+
         public async Task Remove_All()
         {
             var original = await ipfs.Bootstrap.ListAsync();
@@ -48,7 +63,12 @@ namespace Ipfs.Http
             }
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Add_Defaults()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Add_Defaults());
+        }
+
         public async Task Add_Defaults()
         {
             var original = await ipfs.Bootstrap.ListAsync();

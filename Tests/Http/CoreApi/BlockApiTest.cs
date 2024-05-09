@@ -16,7 +16,12 @@ namespace Ipfs.Http
         private string id = "QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
         private byte[] blob = Encoding.UTF8.GetBytes("blorb");
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Put_Bytes()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes());
+        }
+
         public async Task Put_Bytes()
         {
             var cid = await ipfs.Block.PutAsync(blob);
@@ -136,7 +141,12 @@ namespace Ipfs.Http
             Assert.AreEqual(5, info.Size);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Remove()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Remove());
+        }
+
         public async Task Remove()
         {
             var _ = ipfs.Block.PutAsync(blob).Result;
@@ -150,7 +160,12 @@ namespace Ipfs.Http
             ExceptionAssert.Throws<Exception>(() => { var _ = ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF").Result; });
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Remove_Unknown_OK()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Remove_Unknown_OK());
+        }
+
         public async Task Remove_Unknown_OK()
         {
             var cid = await ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF", true);

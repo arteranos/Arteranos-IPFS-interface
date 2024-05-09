@@ -17,7 +17,12 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs.Name);
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Resolve()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Resolve());
+        }
+
         public async Task Resolve()
         {
             IpfsClient ipfs = TestFixture.Ipfs;
@@ -25,7 +30,12 @@ namespace Ipfs.Http
             StringAssert.StartsWith(id, "/ipfs/");
         }
 
-        [Test]
+        [UnityTest]
+        public System.Collections.IEnumerator Async_Publish()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(Publish());
+        }
+
         public async Task Publish()
         {
             var ipfs = TestFixture.Ipfs;
