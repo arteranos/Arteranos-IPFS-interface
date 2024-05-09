@@ -58,6 +58,9 @@
     <PackageReference Include="ICSharpCode.SharpZipLib.dll">
       <Version>0.85.4.369</Version>
     </PackageReference>
+    <PackageReference Include="Multiformats.Base">
+      <Version>2.0.2</Version>
+    </PackageReference>
     <PackageReference Include="Portable.BouncyCastle">
       <Version>1.9.0</Version>
     </PackageReference>

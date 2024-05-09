@@ -6,7 +6,9 @@
         "UnityEditor.TestRunner",
         "ipfs.Http",
         "ipfs.Cryptography",
-        "ipfs.Unity"
+        "ipfs.Unity",
+        "ipfs.HttpEx",
+        "ipfs.Core"
     ],
     "includePlatforms": [
         "Editor"
@@ -17,8 +19,6 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "SimpleBase.dll",
-        "IpfsShipyard.Ipfs.Http.Client.dll",
-        "IpfsShipyard.Ipfs.Core.dll",
         "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,
