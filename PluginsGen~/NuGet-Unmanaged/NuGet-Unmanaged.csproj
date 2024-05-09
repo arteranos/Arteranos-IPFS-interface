@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy bin\Debug\net8.0\runtimes\win-x64\native\*.* ..\..\Assets\IPFS_Engine\Plugins\" />
+    <Exec Command="copy bin\Debug\net8.0\runtimes\win-x64\native\*.* ..\..\Plugins\" />
   </Target>-->
 
 </Project>
