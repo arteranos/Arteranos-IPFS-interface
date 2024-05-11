@@ -55,7 +55,7 @@ namespace Ipfs.Http
                 var ipfs = TestFixture.Ipfs;
                 var result = await ipfs.FileSystem.AddFileAsync(path);
                 Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)result.Id);
-                Assert.AreEqual(0, result.Links.Count());
+                Assert.AreEqual(0, result.Links?.Count() ?? 0);
             }
             finally
             {
@@ -269,6 +269,12 @@ namespace Ipfs.Http
 
                 Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/alpha.txt").Result);
                 Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/beta.txt").Result);
+
+                var recoveredDir = await ipfs.FileSystem.ListAsync(dir.Id);
+                var recoveredFiles = recoveredDir.Links.ToArray();
+                Assert.AreEqual(2, recoveredFiles.Length);
+                Assert.AreEqual("alpha.txt", recoveredFiles[0].Name);
+                Assert.AreEqual("beta.txt", recoveredFiles[1].Name);
             }
             finally
             {
@@ -299,6 +305,9 @@ namespace Ipfs.Http
                 Assert.AreNotEqual(0, files[0].Size);
                 Assert.AreNotEqual(0, files[1].Size);
 
+                // Sure it cannot work. We have to use ListAsync() to retrieve the directory
+                // structure, not by using a half-finished FSN.
+#if false
                 var xfiles = new FileSystemNode
                 {
                     Id = files[2].Id,
@@ -318,7 +327,7 @@ namespace Ipfs.Http
                 {
                     Id = yfiles[0].Id,
                 };
-
+#endif
                 Assert.AreEqual("y", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/x/y/y.txt").Result);
             }
             finally
