@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Linq;
 
+// Pubsub API is not supposed to be used in production
+#if EXPERIMENTAL
 namespace Ipfs.Http
 {
     [TestFixture]
@@ -44,3 +46,5 @@ namespace Ipfs.Http
 
     }
 }
+
+#endif

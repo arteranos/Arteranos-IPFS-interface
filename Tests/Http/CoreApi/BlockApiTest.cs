@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Ipfs.Http
 {
+// REMOVED - Block API is meant to be for fiddling with the repository.
+// kubo can hang with pins after removing blocks.
+#if EXPERIMENTAL
     [TestFixture]
     public class BlockApiTest
     {
@@ -217,4 +220,6 @@ namespace Ipfs.Http
         }
 
     }
+
+#endif
 }

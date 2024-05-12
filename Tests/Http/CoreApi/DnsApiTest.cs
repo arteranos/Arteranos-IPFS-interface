@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace Ipfs.Http
 {
-    [TestFixture]
     public class DnsApiTest
     {
-        [Test]
+        // [Test]
+        [Ignore("Nonexistent Kubo API endpoint: dns")]
         public void Api_Exists()
         {
             IpfsClient ipfs = TestFixture.Ipfs;
             Assert.IsNotNull(ipfs.Dns);
         }
 
-        [UnityTest]
+        // [UnityTest]
+        [Ignore("Nonexistent Kubo API endpoint: dns")]
         public System.Collections.IEnumerator Async_Resolve()
         {
             yield return Unity.Asyncs.Async2Coroutine(Resolve());
@@ -28,26 +29,6 @@ namespace Ipfs.Http
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
             var path = await ipfs.Dns.ResolveAsync("ipfs.io", recursive: true, cancel: cts.Token);
             StringAssert.StartsWith(path, "/ipfs/");
-        }
-
-        [Ignore("takes forever")]
-        public async Task Publish()
-        {
-            var ipfs = TestFixture.Ipfs;
-            var cs = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-            var content = await ipfs.FileSystem.AddTextAsync("hello world");
-            var key = await ipfs.Key.CreateAsync("name-publish-test", "rsa", 1024);
-            try
-            {
-                var result = await ipfs.Name.PublishAsync(content.Id, key.Name, cancel: cs.Token);
-                Assert.IsNotNull(result);
-                StringAssert.EndsWith(result.NamePath, key.Id.ToString());
-                StringAssert.EndsWith(result.ContentPath, content.Id.Encode());
-            }
-            finally
-            {
-                await ipfs.Key.RemoveAsync(key.Name);
-            }
         }
     }
 }

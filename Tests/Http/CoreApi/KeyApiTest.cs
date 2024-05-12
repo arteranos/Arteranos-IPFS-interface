@@ -29,8 +29,12 @@ namespace Ipfs.Http
             var keys = await ipfs.Key.ListAsync();
             var self = keys.Single(k => k.Name == "self");
             var me = await ipfs.IdAsync();
+
+            // Peer ID may be a bare base58btc encoded Multihash (12... or Qm...),
+            // seeing it as a MultiHash, and the Self key ID is a CID. So the CID's digest
+            // is all we can see.
             Assert.AreEqual("self", self.Name);
-            Assert.AreEqual(me.Id, self.Id);
+            Assert.AreEqual(me.Id, self.Id.Hash);
         }
 
         [UnityTest]

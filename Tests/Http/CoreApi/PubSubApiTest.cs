@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+// Pubsub API is not supposed to be used in production
+#if EXPERIMENTAL
 namespace Ipfs.Http
 {
     [TestFixture]
@@ -266,3 +268,4 @@ namespace Ipfs.Http
         }
     }
 }
+#endif

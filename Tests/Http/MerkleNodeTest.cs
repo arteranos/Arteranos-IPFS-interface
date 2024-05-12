@@ -42,6 +42,7 @@ namespace Ipfs.Http
         }
 
         [Test]
+        [Ignore("Use of removed object API - supposed to use ipfs dag or ipfs files")]
         public void FromALink()
         {
             var node = new MerkleNode(IpfsInfo);

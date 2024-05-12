@@ -55,7 +55,7 @@ namespace Ipfs.Http
                 var ipfs = TestFixture.Ipfs;
                 var result = await ipfs.FileSystem.AddFileAsync(path);
                 Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)result.Id);
-                Assert.AreEqual(0, result.Links?.Count() ?? 0);
+                Assert.AreEqual(0, result.Links.Count());
             }
             finally
             {
@@ -155,6 +155,7 @@ namespace Ipfs.Http
                 var node = await ipfs.FileSystem.AddFileAsync(path, options);
                 Assert.AreEqual("QmNxvA5bwvPGgMXbmtyhxA1cKFdvQXnsGnZLCGor3AzYxJ", (string)node.Id);
                 Assert.AreEqual(true, node.IsDirectory);
+                Assert.IsNotNull(node.Links);
                 Assert.AreEqual(1, node.Links.Count());
                 Assert.AreEqual("hello.txt", node.Links.First().Name);
                 Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)node.Links.First().Id);

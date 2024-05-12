@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Ipfs.Http
 {
-// DHT API obsoleted and removed to be replaced with the Routing API.
-#if REMOVED
     [TestFixture]
-    public class DhtApiTest
+    public class RoutingApiTest
     {
         private const string helloWorldID = "QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o";
 
         [UnityTest]
+        [Ignore("Peer may be likely nonexistent or rekeyed")]
         public System.Collections.IEnumerator Async_FindPeer()
         {
             yield return Unity.Asyncs.Async2Coroutine(FindPeer());
@@ -22,9 +21,11 @@ namespace Ipfs.Http
 
         public async Task FindPeer()
         {
-            var ipfs = TestFixture.Ipfs;
+            var ipfs = new IpfsClientEx();
+            Assert.IsNotNull(ipfs);
+
             var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-            var mars = await ipfs.Dht.FindPeerAsync("QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3", cts.Token);
+            var mars = await ipfs.Routing.FindPeerAsync("QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3", cts.Token);
             Assert.IsNotNull(mars);
         }
 
@@ -36,12 +37,13 @@ namespace Ipfs.Http
 
         public async Task FindProviders()
         {
-            var ipfs = TestFixture.Ipfs;
+            var ipfs = new IpfsClientEx();
+            Assert.IsNotNull(ipfs);
+
             var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-            var providers = await ipfs.Dht.FindProvidersAsync(helloWorldID, 1, cancel: cts.Token);
+            var providers = await ipfs.Routing.FindProvidersAsync(helloWorldID, 1, cancel: cts.Token);
             Assert.AreNotEqual(0, providers.Count());
         }
 
     }
-#endif
 }

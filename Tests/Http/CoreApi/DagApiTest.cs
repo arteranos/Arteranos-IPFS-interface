@@ -22,6 +22,8 @@ namespace Ipfs.Http
             public string Last { get; set; }
         }
 
+// DANGEROUS - Pinned Dag Node with dangling (recursive) links causes pin operations to hang.
+#if false
         [UnityTest]
         public System.Collections.IEnumerator Async_TwoLinkData()
         {
@@ -46,6 +48,7 @@ namespace Ipfs.Http
             Assert.AreEqual(link1expectedId, ((string) link1[0]["Hash"]["/"]));
 
         }
+#endif
 
         [UnityTest]
         public System.Collections.IEnumerator Async_KnownGood()

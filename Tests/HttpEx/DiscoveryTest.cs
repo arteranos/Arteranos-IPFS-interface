@@ -49,6 +49,7 @@ namespace Ipfs.Http
         }
 
         [UnityTest]
+        [Ignore("Peer may be likely nonexistent or rekeyed")]
         public IEnumerator FindPeerAddresses()
         {
             var ipfs = new IpfsClientEx();

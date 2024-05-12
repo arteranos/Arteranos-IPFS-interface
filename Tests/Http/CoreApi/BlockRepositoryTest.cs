@@ -16,8 +16,12 @@ namespace Ipfs.Http
         public async Task Stats()
         {
             var ipfs = TestFixture.Ipfs;
-            var stats = await ipfs.BlockRepository.StatisticsAsync();
+            CoreApi.RepositoryData stats = await ipfs.BlockRepository.StatisticsAsync();
             Assert.IsNotNull(stats);
+            UnityEngine.Debug.Log($"Number of objects: {stats.NumObjects}");
+            UnityEngine.Debug.Log($"Repo Size: {stats.RepoSize}");
+            UnityEngine.Debug.Log($"Max Storage Size: {stats.StorageMax}");
+            UnityEngine.Debug.Log($"Path: {stats.RepoPath}");
         }
 
         [UnityTest]

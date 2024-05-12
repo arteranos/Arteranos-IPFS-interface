@@ -27,7 +27,7 @@ namespace Ipfs.Http
         {
             IpfsClient ipfs = TestFixture.Ipfs;
             var id = await ipfs.Name.ResolveAsync("ipfs.io", recursive: true);
-            StringAssert.StartsWith(id, "/ipfs/");
+            StringAssert.StartsWith("/ipfs/", id);
         }
 
         [UnityTest]
@@ -48,8 +48,8 @@ namespace Ipfs.Http
                 var result = await ipfs.Name.PublishAsync(content.Id, key.Name, cancel: cs.Token);
                 Assert.IsNotNull(result);
 
-                StringAssert.EndsWith(result.NamePath, key.Id);
-                StringAssert.EndsWith(result.ContentPath, content.Id.Encode());
+                StringAssert.EndsWith(key.Id, result.NamePath);
+                StringAssert.EndsWith(content.Id.Encode(), result.ContentPath);
             }
             finally
             {

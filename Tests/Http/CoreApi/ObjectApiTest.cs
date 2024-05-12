@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Ipfs.Http
 {
+// REMOVED - object API is gone
+#if REMOVED
     [TestFixture]
     public class ObjectApiTest
     {
@@ -161,6 +163,6 @@ namespace Ipfs.Http
                 return;
             }
         }
-
     }
+#endif
 }
