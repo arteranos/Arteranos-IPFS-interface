@@ -20,11 +20,12 @@ namespace Ipfs.Unity
                 t = t.Negate();
             }
 
-            if (t.Days > 0)
-                sb.Append($"{t.Days}d");
+            // Kubo API documentation errata: 'd' as 'days' are unsupported
+            //if (t.Days > 0)
+            //    sb.Append($"{t.Days}d");
 
-            if (t.Hours > 0)
-                sb.Append($"{t.Hours}h");
+            if (t.Hours > 0 || t.Days > 0)
+                sb.Append($"{24 * t.Days + t.Hours}h");
 
             if (t.Minutes > 0)
                 sb.Append($"{t.Minutes}m");
