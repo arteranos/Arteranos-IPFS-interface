@@ -10,6 +10,7 @@ using Debug = UnityEngine.Debug;
 using System.Net;
 
 using Ipfs.Unity;
+using System.Net.Sockets;
 
 namespace Ipfs.Http
 {
@@ -49,19 +50,19 @@ namespace Ipfs.Http
         }
 
         [UnityTest]
-        [Ignore("Peer may be likely nonexistent or rekeyed")]
+        // [Ignore("Peer may be likely nonexistent or rekeyed")]
         public IEnumerator FindPeerAddresses()
         {
             var ipfs = new IpfsClientEx();
             Assert.IsNotNull(ipfs);
 
-            IEnumerable<IPAddress> ipAddresses = null;
+            IEnumerable<(IPAddress, ProtocolType, int)> ipAddresses = null;
             yield return Asyncs.Async2Coroutine(ipfs.Routing.FindPeerAddressesAsync(Utils.sample_LANPeer), addrs => ipAddresses = addrs);
             Assert.IsNotNull(ipAddresses);
 
             Assert.IsTrue(ipAddresses.Any());
-            foreach (IPAddress addr in ipAddresses)
-                Debug.Log(addr);
+            foreach (var addr in ipAddresses)
+                Debug.Log(addr.Item1);
 
         }
     }
