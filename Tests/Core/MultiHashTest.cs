@@ -31,8 +31,8 @@ namespace Ipfs
         [Test]
         public void Parsing_Unknown_Hash_Number()
         {
-            HashingAlgorithm? unknown = null;
-            void unknownHandler(object? s, UnknownHashingAlgorithmEventArgs e) { unknown = e.Algorithm; }
+            HashingAlgorithm unknown = null;
+            void unknownHandler(object s, UnknownHashingAlgorithmEventArgs e) { unknown = e.Algorithm; }
             var ms = new MemoryStream(new byte[] { 0x01, 0x02, 0x0a, 0x0b });
             MultiHash.UnknownHashingAlgorithm += unknownHandler;
             try
@@ -199,8 +199,8 @@ namespace Ipfs
             var a0 = new MultiHash("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4");
             var a1 = new MultiHash("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4");
             var b = new MultiHash("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L5");
-            MultiHash? c = null;
-            MultiHash? d = null;
+            MultiHash c = null;
+            MultiHash d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);
@@ -291,9 +291,9 @@ namespace Ipfs
 
         private class TestVector
         {
-            public string? Algorithm { get; set; }
-            public string? Input { get; set; }
-            public string? Output { get; set; }
+            public string Algorithm { get; set; }
+            public string Input { get; set; }
+            public string Output { get; set; }
             public bool Ignore { get; set; }
         }
 

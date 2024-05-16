@@ -88,8 +88,8 @@ namespace Ipfs
             var a0 = new Peer { Id = MarsId };
             var a1 = new Peer { Id = MarsId };
             var b = new Peer { Id = PlutoId };
-            Peer? c = null;
-            Peer? d = null;
+            Peer c = null;
+            Peer d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);

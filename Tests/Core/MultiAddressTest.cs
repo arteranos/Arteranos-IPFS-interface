@@ -54,8 +54,8 @@ namespace Ipfs
             var a0 = new MultiAddress(Somewhere);
             var a1 = new MultiAddress(Somewhere);
             var b = new MultiAddress(Nowhere);
-            MultiAddress? c = null;
-            MultiAddress? d = null;
+            MultiAddress c = null;
+            MultiAddress d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);

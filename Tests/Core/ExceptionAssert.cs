@@ -10,7 +10,7 @@ namespace Ipfs
     /// </summary>
     public static class ExceptionAssert
     {
-        public static T Throws<T>(Action action, string? expectedMessage = null) where T : Exception
+        public static T Throws<T>(Action action, string expectedMessage = null) where T : Exception
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Ipfs
         }
 
         // Avoids analyzer recommendations related to unused values.
-        public static T Throws<T, TTest>(Func<TTest> func, string? expectedMessage = null) where T : Exception
+        public static T Throws<T, TTest>(Func<TTest> func, string expectedMessage = null) where T : Exception
         {
             return Throws<T>(() => { var t = func(); }, expectedMessage);
         }

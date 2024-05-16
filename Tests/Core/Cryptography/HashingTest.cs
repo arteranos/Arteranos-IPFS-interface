@@ -11,9 +11,9 @@ namespace Ipfs.Cryptography
 
         private class TestVector
         {
-            public string? Algorithm { get; set; }
-            public string? Input { get; set; }
-            public string? Digest { get; set; }
+            public string Algorithm { get; set; }
+            public string Input { get; set; }
+            public string Digest { get; set; }
         }
 
         private static readonly TestVector[] TestVectors =

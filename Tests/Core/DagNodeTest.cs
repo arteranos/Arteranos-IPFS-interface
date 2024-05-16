@@ -13,7 +13,7 @@ namespace Ipfs
         [Test]
         public void EmptyDAG()
         {
-            var node = new DagNode((byte[]?) null);
+            var node = new DagNode((byte[]) null);
             Assert.AreEqual(0, node.DataBytes.Length);
             Assert.AreEqual(0, node.Links.Count());
             Assert.AreEqual(0, node.Size);
@@ -205,8 +205,8 @@ namespace Ipfs
         [Test]
         public void Setting_Id()
         {
-            var a = new DagNode((byte[]?)null);
-            var b = new DagNode((byte[]?)null)
+            var a = new DagNode((byte[])null);
+            var b = new DagNode((byte[])null)
             {
                 // Wrong hash but allowed.
                 Id = "QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1m"

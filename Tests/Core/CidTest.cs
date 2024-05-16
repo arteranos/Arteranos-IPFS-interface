@@ -255,8 +255,8 @@ namespace Ipfs
             var a0 = Cid.Decode("zb2rhj7crUKTQYRGCRATFaQ6YFLTde2YzdqbbhAASkL9uRDXn");
             var a1 = Cid.Decode("zb2rhj7crUKTQYRGCRATFaQ6YFLTde2YzdqbbhAASkL9uRDXn");
             var b = Cid.Decode("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L5");
-            Cid? c = null;
-            Cid? d = null;
+            Cid c = null;
+            Cid d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);
@@ -394,14 +394,14 @@ namespace Ipfs
 
         private class CidAndX
         {
-            public Cid? Cid;
+            public Cid Cid;
             public int X;
         }
 
         [Test]
         public void JsonSerialization()
         {
-            Cid? a = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4";
+            Cid a = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4";
             string json = JsonConvert.SerializeObject(a);
             Assert.AreEqual($"\"{a.Encode()}\"", json);
             var b = JsonConvert.DeserializeObject<Cid>(json);

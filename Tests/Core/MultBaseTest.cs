@@ -42,9 +42,9 @@ namespace Ipfs
 
         private class TestVector
         {
-            public string? Algorithm { get; set; }
-            public string? Input { get; set; }
-            public string? Output { get; set; }
+            public string Algorithm { get; set; }
+            public string Input { get; set; }
+            public string Output { get; set; }
         }
 
         private static readonly TestVector[] TestVectors = new TestVector[]
