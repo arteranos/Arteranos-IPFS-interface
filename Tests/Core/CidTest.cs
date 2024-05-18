@@ -451,5 +451,28 @@ namespace Ipfs
             var clone = cid.ToArray();
             CollectionAssert.AreEqual(buffer, clone);
         }
+
+        [Test]
+        public void NullCid()
+        {
+            Cid cid = null;
+            Assert.IsNull(cid);
+        }
+
+        [Test]
+        public void FromNullString()
+        {
+            string s = null;
+            Cid cid = s;
+            Assert.IsNull(cid);
+        }
+
+        [Test]
+        public void NullToString() 
+        {
+            Cid cid = null;
+            string s = cid;
+            Assert.IsNull(s);
+        }
     }
 }
