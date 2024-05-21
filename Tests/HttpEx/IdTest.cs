@@ -49,7 +49,7 @@ namespace Ipfs.Http
             var ipfs = new IpfsClientEx();
             Assert.IsNotNull(ipfs);
 
-            PrivateKey pk = ipfs.ReadDaemonPrivateKey();
+            PrivateKey pk = IpfsClientEx.ReadDaemonPrivateKey();
             Assert.IsNotNull(pk);
 
             yield return Asyncs.Async2Coroutine(ipfs.VerifyDaemonAsync(pk));
