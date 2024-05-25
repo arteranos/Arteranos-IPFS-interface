@@ -265,17 +265,30 @@ namespace Ipfs.Http
                 Assert.AreEqual("alpha.txt", files[0].Name);
                 Assert.AreEqual("beta.txt", files[1].Name);
 
+                byte[] file0DAG = await ipfs.Block.GetAsync(files[0].Id);
+                Assert.AreEqual(file0DAG.LongLength, files[0].Size);
+
+                byte[] file1DAG = await ipfs.Block.GetAsync(files[1].Id);
+                Assert.AreEqual(file1DAG.LongLength, files[1].Size);
+
                 Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(files[0].Id).Result);
                 Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(files[1].Id).Result);
 
                 Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/alpha.txt").Result);
                 Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/beta.txt").Result);
 
+                byte[] rawDAG = await ipfs.Block.GetAsync(dir.Id);
+                long cumulativeSize = files[0].Size + files[1].Size + rawDAG.LongLength;
+                Assert.IsNotNull(rawDAG);
+                Assert.AreEqual(cumulativeSize, dir.Size);
+
                 var recoveredDir = await ipfs.FileSystem.ListAsync(dir.Id);
                 var recoveredFiles = recoveredDir.Links.ToArray();
                 Assert.AreEqual(2, recoveredFiles.Length);
                 Assert.AreEqual("alpha.txt", recoveredFiles[0].Name);
                 Assert.AreEqual("beta.txt", recoveredFiles[1].Name);
+
+                // kubo doesn't yield the cumulative size, only in the submit.
             }
             finally
             {
