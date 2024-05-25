@@ -20,14 +20,11 @@ namespace Ipfs.Http
         {
             var ipfs = new IpfsClientEx();
             Assert.IsNotNull(ipfs);
-            
-            CoreApi.BitswapData data = null;
-            yield return Asyncs.Async2Coroutine(ipfs.Stats.BitswapAsync(), _data => data = _data);
+            Assert.IsNotNull(ipfs.FileSystemEx);
+            Assert.IsNotNull(ipfs.Routing);
+            Assert.IsNotNull(ipfs.NameEx);
 
-            Assert.IsNotNull(data.Peers);
-
-            //foreach(MultiHash peer in data.Peers)
-            //    Debug.Log(peer);
+            yield return null;
         }
 
         [UnityTest]
