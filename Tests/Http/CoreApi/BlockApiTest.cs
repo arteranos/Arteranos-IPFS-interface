@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace Ipfs.Http
 {
-// REMOVED - Block API is meant to be for fiddling with the repository.
-// kubo can hang with pins after removing blocks.
-#if EXPERIMENTAL
     [TestFixture]
     public class BlockApiTest
     {
         private IpfsClient ipfs = TestFixture.Ipfs;
-        private string id = "QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
+        // private string id = "QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
+        private string id = "bafkreiaxnnnb7qz2focittuqq3ya25q7rcv3bqynnczfzako47346wosmu";
         private byte[] blob = Encoding.UTF8.GetBytes("blorb");
 
         [UnityTest]
@@ -170,9 +168,6 @@ namespace Ipfs.Http
             var _ = await ipfs.Block.PutAsync(blob);
             var block = await ipfs.Block.GetAsync(id);
             CollectionAssert.AreEqual(blob, block);
-
-            var blob1 = new byte[blob.Length];
-            CollectionAssert.AreEqual(blob, blob1);
         }
 
         [UnityTest]
@@ -205,7 +200,7 @@ namespace Ipfs.Http
         [Test]
         public void Remove_Unknown()
         {
-            ExceptionAssert.Throws<Exception>(() => { var _ = ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF"); });
+            ExceptionAssert.Throws<Exception>(() => { var _ = ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF").Result; });
         }
 
         [UnityTest]
@@ -220,6 +215,4 @@ namespace Ipfs.Http
         }
 
     }
-
-#endif
 }
