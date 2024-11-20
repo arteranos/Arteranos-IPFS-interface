@@ -1,0 +1,16 @@
+{
+    "name": "Unity.Net.Http",
+    "rootNamespace": "Unity.Net.Http",
+    "references": [
+        "GUID:8cfbf7cd1b5377f478c8d27f7ea0ee54"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
