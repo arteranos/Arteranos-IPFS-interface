@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class BlockApiTest
+    public class BlockApiTest : TestFixture
     {
         private IpfsClient ipfs = TestFixture.Ipfs;
         // private string id = "QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";

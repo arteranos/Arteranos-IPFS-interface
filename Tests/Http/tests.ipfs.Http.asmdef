@@ -6,11 +6,10 @@
         "UnityEditor.TestRunner",
         "ipfs.Http",
         "ipfs.Unity",
-        "ipfs.Core"
+        "ipfs.Core",
+        "Unity.Net.Http"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

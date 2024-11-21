@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class BitswapApiTest
+    public class BitswapApiTest : TestFixture
     {
         private IpfsClient ipfs = TestFixture.Ipfs;
 

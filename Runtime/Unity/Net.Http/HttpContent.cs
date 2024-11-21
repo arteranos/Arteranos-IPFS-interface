@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Unity.Net.Http
 {
     public class HttpContent : IDisposable
     {
-        private System.Net.Http.HttpContent _inner;
+        protected System.Net.Http.HttpContent _inner;
 
         public static implicit operator HttpContent(System.Net.Http.HttpContent content) { return new() { _inner = content }; }
         public static implicit operator System.Net.Http.HttpContent(HttpContent content) { return content._inner; }
@@ -49,9 +50,36 @@ namespace Unity.Net.Http
         public StringContent(string str, Encoding encoding) : base(str, encoding) { }
     }
 
-    public class MultipartFormDataContent : System.Net.Http.MultipartFormDataContent
+    public class MultipartFormDataContent : HttpContent, IEnumerable
     {
+        public string Boundary { get; private set; } = null;
 
+        public MultipartFormDataContent() 
+        {
+            Init(Guid.NewGuid().ToString());
+        }
+
+        public MultipartFormDataContent(string boundary)
+        {
+            Init(boundary);
+        }
+
+        private void Init(string boundary)
+        {
+            _inner = new System.Net.Http.MultipartFormDataContent(boundary);
+            Boundary = boundary;
+        }
+
+        public void Add(HttpContent content, string name)
+            => (_inner as System.Net.Http.MultipartFormDataContent).Add(content, name);
+
+        public void Add(HttpContent content, string name, string fileName)
+            => (_inner as System.Net.Http.MultipartFormDataContent).Add(content, name, fileName);
+
+        public IEnumerator GetEnumerator()
+        {
+            return (_inner as System.Net.Http.MultipartFormDataContent).GetEnumerator();
+        }
     }
 
     public enum HttpCompletionOption

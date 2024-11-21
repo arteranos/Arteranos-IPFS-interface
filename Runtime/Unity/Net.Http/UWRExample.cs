@@ -14,12 +14,14 @@ using System.Text;
 
 public class UWRExample : MonoBehaviour
 {
+#if false
     internal class WebRequest
     {
         public HttpRequestMessage request;
         public volatile DownloadHandlerStream downloadHandler;
         public volatile Exception exception;
     }
+
 
     internal ConcurrentQueue<WebRequest> WebRequestQueue = new();
 
@@ -77,5 +79,13 @@ public class UWRExample : MonoBehaviour
         }
 
         Debug.Log("Completed.");
+    }
+#endif
+
+    private void Start()
+    {
+        Wrapper wrapper = new Wrapper();
+
+
     }
 }

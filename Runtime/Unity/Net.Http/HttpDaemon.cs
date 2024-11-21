@@ -57,7 +57,12 @@ namespace Unity.Net.Http
                 yield return new WaitUntil(() => taskContentBlob.IsCompleted);
 
                 uploadHandler = new UploadHandlerRaw(taskContentBlob.Result);
-                uploadHandler.contentType = sendContent.Headers.ContentType.MediaType;
+
+                // Multipart contents need their boundary marker
+                if(sendContent is MultipartFormDataContent mp)
+                    uploadHandler.contentType = $"{sendContent.Headers.ContentType.MediaType}; boundary=\"{mp.Boundary}\"";
+                else
+                    uploadHandler.contentType = sendContent.Headers.ContentType.MediaType;
             }
 
             using UnityWebRequest uwr = new(
@@ -75,14 +80,12 @@ namespace Unity.Net.Http
 
             yield return uwrAo;
 
-            incoming.downloadHandler.StatusCode = (int)uwr.responseCode;
-
             incoming.exception = uwr.result switch
             {
                 UnityWebRequest.Result.InProgress => new InvalidOperationException(), // Should never happen, after the 'yield return'
                 UnityWebRequest.Result.Success => null,
-                UnityWebRequest.Result.ConnectionError => new IOException(),
-                UnityWebRequest.Result.ProtocolError => new HttpRequestException(uwr.error),
+                UnityWebRequest.Result.ConnectionError => new HttpRequestException(uwr.error),
+                UnityWebRequest.Result.ProtocolError => null,
                 UnityWebRequest.Result.DataProcessingError => new HttpRequestException(uwr.error),
                 _ => new NotSupportedException(),
             };

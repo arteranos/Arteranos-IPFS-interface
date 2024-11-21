@@ -68,6 +68,18 @@ namespace Unity.Net.Http
             return res;
         }
 
+        public override void Dispose()
+        {
+            // Nothing more to download, or we're interrupted.
+            // In any case, close up the pipe.
+            try
+            {
+                _pipe.CloseWrite();
+            }
+            catch { }
+
+            base.Dispose();
+        }
         #endregion
     }
 }
