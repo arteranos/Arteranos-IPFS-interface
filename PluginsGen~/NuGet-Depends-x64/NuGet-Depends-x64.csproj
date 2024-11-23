@@ -63,7 +63,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>mkdir $(SolutionDir)..\Plugins\$(PlatformName) &amp;
-copy $(TargetDir)libcurl.dll $(SolutionDir)..\Plugins\$(PlatformName)</PostBuildEvent>
+copy $(TargetDir)*.dll $(SolutionDir)..\Plugins\$(PlatformName)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
