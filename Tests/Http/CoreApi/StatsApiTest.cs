@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class StatsApiTest
+    public class StatsApiTest : TestFixture
     {
 
         [UnityTest]

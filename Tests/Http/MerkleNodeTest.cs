@@ -7,7 +7,7 @@ using System.Linq;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public partial class MerkleNodeTest
+    public partial class MerkleNodeTest : TestFixture
     {
         private const string IpfsInfo = "QmVtU7ths96fMgZ8YSZAbKghyieq7AjxNdcqyVzxTt3qVe";
 

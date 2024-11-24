@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using System.Net.Http;
+using Unity.Net.Http;
 using System.Threading;
 
 namespace Ipfs.Http
@@ -10,7 +10,7 @@ namespace Ipfs.Http
     ///to contain all IpfsClientTest Unit Tests
     ///</summary>
     [TestFixture]
-    public partial class IpfsClientTest
+    public partial class IpfsClientTest : TestFixture
     {
         /// <summary>
         ///   A test for IpfsClient Constructor

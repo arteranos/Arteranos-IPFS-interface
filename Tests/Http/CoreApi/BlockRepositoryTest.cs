@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class BlockRepositoryTest
+    public class BlockRepositoryTest : TestFixture
     {
         [UnityTest]
         public System.Collections.IEnumerator Async_Stats()

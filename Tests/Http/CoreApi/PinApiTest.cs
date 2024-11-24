@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class PinApiTest
+    public class PinApiTest : TestFixture
     {
         [Test]
         public void List()

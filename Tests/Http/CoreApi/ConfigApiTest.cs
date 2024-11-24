@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class ConfigApiTest
+    public class ConfigApiTest : TestFixture
     {
         private const string apiAddress = "/ip4/127.0.0.1/tcp/";
         private const string gatewayAddress = "/ip4/127.0.0.1/tcp/";
