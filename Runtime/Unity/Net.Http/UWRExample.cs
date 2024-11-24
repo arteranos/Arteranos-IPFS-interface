@@ -84,7 +84,6 @@ public class UWRExample : MonoBehaviour
 
     private void Start()
     {
-        Wrapper wrapper = new Wrapper();
 
 
     }

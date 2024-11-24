@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet-Depends", "NuGet-Depe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuGet-Unmanaged", "NuGet-Unmanaged\NuGet-Unmanaged.csproj", "{393D9D60-9D36-4F5E-8B48-DC93BD1E6331}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurlThinExtractor", "CurlThinExtractor\CurlThinExtractor.csproj", "{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,17 @@ Global
 		{393D9D60-9D36-4F5E-8B48-DC93BD1E6331}.Release|Any CPU.Build.0 = Release|Any CPU
 		{393D9D60-9D36-4F5E-8B48-DC93BD1E6331}.Release|x64.ActiveCfg = Release|Any CPU
 		{393D9D60-9D36-4F5E-8B48-DC93BD1E6331}.Release|x86.ActiveCfg = Release|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Debug|x64.ActiveCfg = Debug|x64
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Debug|x64.Build.0 = Debug|x64
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Debug|x86.ActiveCfg = Debug|x86
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Debug|x86.Build.0 = Debug|x86
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Release|x64.ActiveCfg = Release|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Release|x64.Build.0 = Release|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Release|x86.ActiveCfg = Release|Any CPU
+		{B78B93B4-83D6-4EAD-8393-D9FF3DDBFEFD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
