@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class SwarmApiTest
+    public class SwarmApiTest: TestFixture
     {
         [UnityTest]
         public System.Collections.IEnumerator Async_Addresses()

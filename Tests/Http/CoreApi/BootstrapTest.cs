@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class BootstapApiTest
+    public class BootstapApiTest : TestFixture
     {
         IpfsClient ipfs = TestFixture.Ipfs;
         MultiAddress somewhere = "/ip4/127.0.0.1/tcp/4009/ipfs/QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";

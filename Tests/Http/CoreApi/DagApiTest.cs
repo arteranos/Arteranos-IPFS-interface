@@ -13,7 +13,7 @@ using System.Threading;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class DagApiTest
+    public class DagApiTest : TestFixture
     {
         class Name
         {

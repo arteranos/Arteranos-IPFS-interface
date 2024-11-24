@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class NameApiTest
+    public class NameApiTest : TestFixture
     {
         [Test]
         public void Api_Exists()

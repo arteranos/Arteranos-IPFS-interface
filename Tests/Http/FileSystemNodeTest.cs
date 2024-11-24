@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class FileSystemNodeTest
+    public class FileSystemNodeTest : TestFixture
     {
         [UnityTest]
         public System.Collections.IEnumerator Async_Serialization()

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class FileSystemApiTest
+    public class FileSystemApiTest : TestFixture
     {
         [UnityTest]
         public System.Collections.IEnumerator Async_AddText()

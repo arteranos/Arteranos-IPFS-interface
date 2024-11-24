@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class GenericApiTest
+    public class GenericApiTest : TestFixture
     {
         [UnityTest]
         public System.Collections.IEnumerator Async_Local_Node_Info()

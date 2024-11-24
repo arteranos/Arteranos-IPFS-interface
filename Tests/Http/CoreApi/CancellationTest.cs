@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Ipfs.Http
 {
     [TestFixture]
-    public class CancellationTest
+    public class CancellationTest : TestFixture
     {
         [UnityTest]
         public System.Collections.IEnumerator Async_Cancel_Operation()
