@@ -11,9 +11,12 @@ using Debug = UnityEngine.Debug;
 
 using Unity.IO.Pipes;
 
-// using SeasideResearch.LibCurlNet;
-using Unity.Libcurl;
 using System.Runtime.InteropServices;
+
+using CurlThin;
+using CurlThin.Enums;
+using CurlThin.SafeHandles;
+using CurlThin.Helpers;
 
 namespace Unity.Net.Http
 {
@@ -34,14 +37,14 @@ namespace Unity.Net.Http
             public HttpContent responseContent = null;
             public HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             public ProcessStage stage = ProcessStage._invalid;
-            public CURLcode performResult = (CURLcode)(-1);
+            public CURLcode performResult;
             public Pipe contentDownloadPipe = null;
             public Stream contentUploadStream = null;
         }
 
         public static HttpDaemon Instance { get; private set; } = null;
 
-        private Unity.Libcurl.Curl _curl;
+        private static CURLcode _curlStatus;
         public static void EnsureRunning()
         {
             if(Instance != null) return;
@@ -52,15 +55,25 @@ namespace Unity.Net.Http
         private void Awake()
         {
             Instance = this;
-            _curl = new();
+
+            _curlStatus = CurlNative.Init();
         }
 
         private void OnDestroy()
         {
-            _curl = null;
+            // Cleanup does too much, like exiting Unity Editor...
+            //if(_curlStatus == CURLcode.OK) CurlNative.Cleanup();
         }
 
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequest, HttpCompletionOption hco, CancellationToken cancel = default)
+        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequest, HttpCompletionOption hco, CancellationToken cancel = default)
+        {
+            return Task.Run(() =>
+            {
+                return Send(httpRequest, hco, cancel);
+            });
+        }
+
+        public HttpResponseMessage Send(HttpRequestMessage httpRequest, HttpCompletionOption hco, CancellationToken cancel = default)
         {
             httpRequest.CompletionOption = hco;
             WebRequest request = new() { request = httpRequest };
@@ -84,13 +97,13 @@ namespace Unity.Net.Http
                 // Task canceled
                 if (cancel.IsCancellationRequested) throw new TaskCanceledException();
 
-                await Task.Yield();
+                Thread.Yield();
             }
 
             // Definitely faulted, propagate exception
             if (t.IsFaulted)
             {
-                Debug.LogException(t.Exception);
+                // Debug.LogException(t.Exception);
                 throw t.Exception;
             }
 
@@ -106,7 +119,7 @@ namespace Unity.Net.Http
         private Task<CURLcode> PerformAsync(WebRequest request)
         {
             return Task.Run(() => {
-                Easy easy = _curl.CreateEasy();
+                using SafeEasyHandle easy = CurlNative.Easy.Init();
                 GCHandle requestHandle = GCHandle.Alloc(request);
                 IntPtr requestPtr = (IntPtr)requestHandle;
 
@@ -114,8 +127,11 @@ namespace Unity.Net.Http
 
                 // Slist headers = null;
 
-                easy.SetOpt(CURLoption.CURLOPT_URL, request.request.RequestUri.ToString());
-                easy.SetOpt(CURLoption.CURLOPT_CUSTOMREQUEST, request.request.Method);
+                CurlNative.Easy.SetOpt(easy, CURLoption.URL, request.request.RequestUri.ToString());
+                CurlNative.Easy.SetOpt(easy, CURLoption.CUSTOMREQUEST, request.request.Method);
+
+                SafeSlistHandle headers = null;
+                GCHandle pinnedContentBlob = default;
                 if (request.contentUploadStream != null)
                 {
                     using MemoryStream ms = new();
@@ -129,36 +145,47 @@ namespace Unity.Net.Http
                         ctstring = $"Content-Type: {sendContent.Headers.ContentType.MediaType}";
 
                     byte[] bytes = ms.ToArray();
-                    easy.SetOpt(CURLoption.CURLOPT_POSTFIELDS, bytes);
-                    easy.SetOpt(CURLoption.CURLOPT_POSTFIELDSIZE, bytes.Length);
+                    pinnedContentBlob = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+                    headers = CurlNative.Slist.Append(SafeSlistHandle.Null, ctstring);
+
+                    CurlNative.Easy.SetOpt(easy, CURLoption.POSTFIELDS, pinnedContentBlob.AddrOfPinnedObject());
+                    CurlNative.Easy.SetOpt(easy, CURLoption.POSTFIELDSIZE, bytes.Length);
+                    CurlNative.Easy.SetOpt(easy, CURLoption.HTTPHEADER, headers.DangerousGetHandle());
 
                     // headers = new();
                     // headers.Append(ctstring);
                 }
 
-                easy.SetOpt(CURLoption.CURLOPT_WRITEDATA, requestPtr);
-                easy.SetOpt(CURLoption.CURLOPT_WRITEFUNCTION, GotContentData);
-                easy.SetOpt(CURLoption.CURLOPT_HEADERDATA, requestPtr);
-                easy.SetOpt(CURLoption.CURLOPT_HEADERFUNCTION, GotHeaderData);
+                var datacopier = new DataCallbackCopier();
+                CurlNative.Easy.SetOpt(easy, CURLoption.WRITEDATA, requestPtr);
+                CurlNative.Easy.SetOpt(easy, CURLoption.WRITEFUNCTION, WrapWriteHandler(GotContentData));
+                CurlNative.Easy.SetOpt(easy, CURLoption.HEADERDATA, requestPtr);
+                CurlNative.Easy.SetOpt(easy, CURLoption.HEADERFUNCTION, WrapWriteHandler(GotHeaderData));
 
-                // easy.SetOpt(CURLoption.CURLOPT_USERAGENT, "Mozilla 4.0 (compatible; MSIE 6.0; Win32");
+                CurlNative.Easy.SetOpt(easy, CURLoption.USERAGENT, "CurlThinner");
 
-                // if(headers != null) easy.SetOpt(CURLoption.CURLOPT_HTTPHEADER, headers);
-                request.performResult = easy.Perform();
+
+                // if(headers != null) CurlNative.Easy.SetOpt(easy, CURLoption.HTTPHEADER, headers);
+                request.performResult = CurlNative.Easy.Perform(easy);
+                if (request.contentUploadStream != null)
+                {
+                    pinnedContentBlob.Free();
+                    CurlNative.Slist.FreeAll(headers);
+                }
+
                 //if(headers != null)
                 //{
                 //    headers?.FreeAll();
                 //}
 
                 request.contentDownloadPipe.CloseWrite();
-
                 requestHandle.Free();
 
                 switch (request.performResult)
                 {
-                    case CURLcode.CURLE_OK:
+                    case CURLcode.OK:
                         break;
-                    case CURLcode.CURLE_ABORTED_BY_CALLBACK:
+                    case CURLcode.ABORTED_BY_CALLBACK:
                         throw new TaskCanceledException();
                     default:
                         throw new HttpRequestException($"Curl error {request.performResult}");
@@ -170,7 +197,18 @@ namespace Unity.Net.Http
             });
         }
 
-        private static int GotHeaderData(byte[] buffer, int size, int nmemb, IntPtr extra)
+        private static CurlNative.Easy.DataHandler WrapWriteHandler(Func<byte[], IntPtr, int> func)
+        {
+            return (data, size, nmemb, userdata) =>
+            {
+                var length = (int)size * (int)nmemb;
+                var buffer = new byte[length];
+                Marshal.Copy(data, buffer, 0, length);
+                return (UIntPtr) func(buffer, userdata);
+            };
+        }
+
+        private static int GotHeaderData(byte[] buffer, IntPtr extra)
         {
             GCHandle gch = (GCHandle)extra;
             WebRequest request = (WebRequest)gch.Target;
@@ -180,7 +218,7 @@ namespace Unity.Net.Http
                 return 0;
             }
 
-            Debug.Log(Encoding.UTF8.GetString(buffer));
+            // Debug.Log(Encoding.UTF8.GetString(buffer));
             string[] msg = Encoding.UTF8.GetString(buffer).Split(' ');
             if (request.stage != ProcessStage.StatusCodeReceived)
             {
@@ -210,7 +248,7 @@ namespace Unity.Net.Http
             return buffer.Length; // keep going
         }
 
-        private static int GotContentData(byte[] buffer, int size, int nmemb, IntPtr extra)
+        private static int GotContentData(byte[] buffer, IntPtr extra)
         {
             GCHandle gch = (GCHandle) extra;
             WebRequest request = (WebRequest) gch.Target;
@@ -223,7 +261,7 @@ namespace Unity.Net.Http
             request.stage = ProcessStage.HeaderReceived;
             
             request.contentDownloadPipe.Write(new ReadOnlyMemory<byte>(buffer));
-            Debug.Log($"Received {buffer.Length} bytes of content");
+            // Debug.Log($"Received {buffer.Length} bytes of content");
 
             return buffer.Length; // keep going
         }
