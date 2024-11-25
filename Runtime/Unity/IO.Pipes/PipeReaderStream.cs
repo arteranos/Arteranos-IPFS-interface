@@ -26,7 +26,7 @@ namespace Unity.IO.Pipes
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return _pipe.ReadAsyncInternal(new Memory<byte>(buffer, offset, count), default).Result;
+            return _pipe.ReadInternal(new Memory<byte>(buffer, offset, count), default);
         }
 
         public override long Seek(long offset, SeekOrigin origin)

@@ -22,14 +22,15 @@ namespace Unity.IO.Pipes
         private bool _writeEOF = false;
         private bool _readEOF = false;
 
-        internal async Task<int> ReadAsyncInternal(Memory<byte> buffer, CancellationToken cancel)
+        internal int ReadInternal(Memory<byte> buffer, CancellationToken cancel)
         {
             ThrowIfDisposed();
 
+            // Debug.Log($"Pipe read, wants {buffer.Length}");
             PipeChunk chunk = null;
             while(!cancel.IsCancellationRequested && !_chunks.TryPeek(out chunk) && !_readEOF)
             {
-                await Task.Yield();
+                Thread.Yield();
             }
 
             if(cancel.IsCancellationRequested)
@@ -37,6 +38,7 @@ namespace Unity.IO.Pipes
 
             if (chunk == null)
             {
+                // Debug.Log("... hit EOF");
                 _readEOF = true;
                 return 0;
             }
@@ -55,6 +57,7 @@ namespace Unity.IO.Pipes
 
             if (chunk.consumed >= chunk.data.Length) _chunks.TryDequeue(out _);
 
+            // Debug.Log($"... got {receivingLength} bytes");
             return receivingLength;
         }
 
