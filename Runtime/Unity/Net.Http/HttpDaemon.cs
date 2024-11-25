@@ -222,10 +222,18 @@ namespace Unity.Net.Http
             string[] msg = Encoding.UTF8.GetString(buffer).Split(' ');
             if (request.stage != ProcessStage.StatusCodeReceived)
             {
-                if (msg[0].StartsWith("HTTP")) 
-                    request.statusCode = (HttpStatusCode) int.Parse(msg[1]);
+                if (msg[0].StartsWith("HTTP"))
+                {
+                    int v = int.Parse(msg[1]);
 
-                request.stage = ProcessStage.StatusCodeReceived;
+                    // Ignore 100 - Continue
+                    if(v > 199)
+                    {
+                        request.statusCode = (HttpStatusCode)v;
+                        request.stage = ProcessStage.StatusCodeReceived;
+                    }
+                }
+
                 return buffer.Length; // Not _really_ a header.
             }
 
@@ -240,7 +248,9 @@ namespace Unity.Net.Http
             if (msg.Length == 1 && (msg[0] == "\r\n" || msg[0] == "\n")) 
             {
                 //Debug.Log("Reader received, expecting content");
-                request.stage = ProcessStage.HeaderReceived;
+
+                if(request.stage == ProcessStage.StatusCodeReceived) 
+                    request.stage = ProcessStage.HeaderReceived;
             }
             //else if (msg.Length == 1)
             //    Debug.Log($"Unknown header line: '{msg[0]}' ({msg[0].Length} code points)");
