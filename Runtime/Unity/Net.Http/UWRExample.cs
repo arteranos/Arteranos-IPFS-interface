@@ -125,12 +125,12 @@ public class UWRExample : MonoBehaviour
 
                 Debug.Log($"Completed PostAsync, status={response?.StatusCode}");
 
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    byte[] content = response.Content.ReadAsByteArrayAsync().Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    byte[] content = response.Content.ReadAsByteArrayAsync().Result;
 
-                //    Debug.Log($"Received {content.Length} bytes of content");
-                //}
+                    Debug.Log($"Received {content.Length} bytes of content");
+                }
             }
             catch (Exception ex)
             {

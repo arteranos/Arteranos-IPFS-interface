@@ -61,8 +61,7 @@ namespace Unity.Net.Http
 
         private void OnDestroy()
         {
-            // Cleanup does too much, like exiting Unity Editor...
-            //if(_curlStatus == CURLcode.OK) CurlNative.Cleanup();
+            if(_curlStatus == CURLcode.OK) CurlNative.Cleanup();
         }
 
         public Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequest, HttpCompletionOption hco, CancellationToken cancel = default)
