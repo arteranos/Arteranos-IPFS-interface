@@ -12,7 +12,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Serialization()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Serialization());
+            yield return Unity.Asyncs.Async2Coroutine(Serialization);
         }
 
         public async Task Serialization()

@@ -12,7 +12,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Addresses()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Addresses());
+            yield return Unity.Asyncs.Async2Coroutine(Addresses);
         }
 
         public async Task Addresses()
@@ -30,7 +30,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Peers()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Peers());
+            yield return Unity.Asyncs.Async2Coroutine(Peers);
         }
 
         public async Task Peers()
@@ -48,7 +48,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Peers_Info()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Peers_Info());
+            yield return Unity.Asyncs.Async2Coroutine(Peers_Info);
         }
 
         public async Task Peers_Info()
@@ -69,7 +69,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Connection()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Connection());
+            yield return Unity.Asyncs.Async2Coroutine(Connection);
         }
 
         public async Task Connection()
@@ -98,7 +98,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Filter_Add_Remove()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Filter_Add_Remove());
+            yield return Unity.Asyncs.Async2Coroutine(Filter_Add_Remove);
         }
 
         public async Task Filter_Add_Remove()
@@ -125,7 +125,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Filter_List()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Filter_List());
+            yield return Unity.Asyncs.Async2Coroutine(Filter_List);
         }
 
         public async Task Filter_List()
@@ -138,7 +138,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Filter_Remove_Unknown()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Filter_Remove_Unknown());
+            yield return Unity.Asyncs.Async2Coroutine(Filter_Remove_Unknown);
         }
 
         public async Task Filter_Remove_Unknown()

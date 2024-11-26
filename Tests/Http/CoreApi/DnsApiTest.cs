@@ -20,7 +20,7 @@ namespace Ipfs.Http
         [Ignore("Nonexistent Kubo API endpoint: dns")]
         public System.Collections.IEnumerator Async_Resolve()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Resolve());
+            yield return Unity.Asyncs.Async2Coroutine(Resolve);
         }
 
         public async Task Resolve()

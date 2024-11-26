@@ -11,7 +11,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Local_Node_Info()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Local_Node_Info());
+            yield return Unity.Asyncs.Async2Coroutine(Local_Node_Info);
         }
 
         public async Task Local_Node_Info()
@@ -25,7 +25,7 @@ namespace Ipfs.Http
         [Ignore("Surely outdated")]
         public System.Collections.IEnumerator Async_Peer_Node_Info()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Peer_Node_Info());
+            yield return Unity.Asyncs.Async2Coroutine(Peer_Node_Info);
         }
 
         public async Task Peer_Node_Info()
@@ -38,7 +38,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Version_Info()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Version_Info());
+            yield return Unity.Asyncs.Async2Coroutine(Version_Info);
         }
 
         public async Task Version_Info()
@@ -53,7 +53,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Resolve()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Resolve());
+            yield return Unity.Asyncs.Async2Coroutine(Resolve);
         }
 
         public async Task Resolve()
@@ -66,7 +66,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Ping_Peer()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Ping_Peer());
+            yield return Unity.Asyncs.Async2Coroutine(Ping_Peer);
         }
 
         public async Task Ping_Peer()
@@ -81,7 +81,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Ping_Address()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Ping_Address());
+            yield return Unity.Asyncs.Async2Coroutine(Ping_Address);
         }
 
         public async Task Ping_Address()

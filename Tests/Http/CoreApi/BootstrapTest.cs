@@ -14,7 +14,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_Remove()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_Remove());
+            yield return Unity.Asyncs.Async2Coroutine(Add_Remove);
         }
 
         public async Task Add_Remove()
@@ -35,7 +35,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_List()
         {
-            yield return Unity.Asyncs.Async2Coroutine(List());
+            yield return Unity.Asyncs.Async2Coroutine(List);
         }
 
         public async Task List()
@@ -48,7 +48,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Remove_All()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Remove_All());
+            yield return Unity.Asyncs.Async2Coroutine(Remove_All);
         }
 
         public async Task Remove_All()
@@ -66,7 +66,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_Defaults()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_Defaults());
+            yield return Unity.Asyncs.Async2Coroutine(Add_Defaults);
         }
 
         public async Task Add_Defaults()

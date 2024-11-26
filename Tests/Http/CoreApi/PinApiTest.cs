@@ -20,7 +20,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_Remove()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_Remove());
+            yield return Unity.Asyncs.Async2Coroutine(Add_Remove);
         }
 
         public async Task Add_Remove()

@@ -12,7 +12,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Ledger()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Ledger());
+            yield return Unity.Asyncs.Async2Coroutine(Ledger);
         }
 
         public async Task Ledger()

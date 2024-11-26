@@ -20,7 +20,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Bytes()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes);
         }
 
         public async Task Put_Bytes()
@@ -42,7 +42,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Bytes_ContentType()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes_ContentType());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes_ContentType);
         }
 
         public async Task Put_Bytes_ContentType()
@@ -58,7 +58,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Bytes_Hash()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes_Hash());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes_Hash);
         }
 
         public async Task Put_Bytes_Hash()
@@ -74,7 +74,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Bytes_Pinned()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes_Pinned());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Bytes_Pinned);
         }
 
         public async Task Put_Bytes_Pinned()
@@ -93,7 +93,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Stream()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Stream());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Stream);
         }
 
         public async Task Put_Stream()
@@ -109,7 +109,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Stream_ContentType()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Stream_ContentType());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Stream_ContentType);
         }
 
         public async Task Put_Stream_ContentType()
@@ -125,7 +125,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Stream_Hash()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Stream_Hash());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Stream_Hash);
         }
 
         public async Task Put_Stream_Hash()
@@ -141,7 +141,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Put_Stream_Pinned()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Put_Stream_Pinned());
+            yield return Unity.Asyncs.Async2Coroutine(Put_Stream_Pinned);
         }
 
         public async Task Put_Stream_Pinned()
@@ -160,7 +160,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Get()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Get());
+            yield return Unity.Asyncs.Async2Coroutine(Get);
         }
 
         public async Task Get()
@@ -173,7 +173,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Stat()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Stat());
+            yield return Unity.Asyncs.Async2Coroutine(Stat);
         }
 
         public async Task Stat()
@@ -187,7 +187,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Remove()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Remove());
+            yield return Unity.Asyncs.Async2Coroutine(Remove);
         }
 
         public async Task Remove()
@@ -207,7 +207,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Remove_Unknown_OK()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Remove_Unknown_OK());
+            yield return Unity.Asyncs.Async2Coroutine(Remove_Unknown_OK);
         }
 
         public async Task Remove_Unknown_OK()

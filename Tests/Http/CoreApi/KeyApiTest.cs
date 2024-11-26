@@ -19,7 +19,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Self_Key_Exists()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Self_Key_Exists());
+            yield return Unity.Asyncs.Async2Coroutine(Self_Key_Exists);
         }
 
         public async Task Self_Key_Exists()
@@ -40,7 +40,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Create_RSA_Key()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Create_RSA_Key());
+            yield return Unity.Asyncs.Async2Coroutine(Create_RSA_Key);
         }
 
         public async Task Create_RSA_Key()
@@ -68,7 +68,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Remove_Key()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Remove_Key());
+            yield return Unity.Asyncs.Async2Coroutine(Remove_Key);
         }
 
         public async Task Remove_Key()
@@ -92,7 +92,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Rename_Key()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Rename_Key());
+            yield return Unity.Asyncs.Async2Coroutine(Rename_Key);
         }
 
         public async Task Rename_Key()

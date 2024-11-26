@@ -53,7 +53,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_KnownGood()
         {
-            yield return Unity.Asyncs.Async2Coroutine(KnownGood());
+            yield return Unity.Asyncs.Async2Coroutine(KnownGood);
         }
 
         public async Task KnownGood()
@@ -74,7 +74,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_PutAndGet_JSON()
         {
-            yield return Unity.Asyncs.Async2Coroutine(PutAndGet_JSON());
+            yield return Unity.Asyncs.Async2Coroutine(PutAndGet_JSON);
         }
 
         public async Task PutAndGet_JSON()
@@ -98,7 +98,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_CreateDir()
         {
-            yield return Unity.Asyncs.Async2Coroutine(CreateDir());
+            yield return Unity.Asyncs.Async2Coroutine(CreateDir);
         }
 
         public async Task CreateDir()
@@ -147,7 +147,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_PutAndGet_POCO()
         {
-            yield return Unity.Asyncs.Async2Coroutine(PutAndGet_POCO());
+            yield return Unity.Asyncs.Async2Coroutine(PutAndGet_POCO);
         }
 
         public async Task PutAndGet_POCO()

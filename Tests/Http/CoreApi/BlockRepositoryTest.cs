@@ -10,7 +10,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Stats()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Stats());
+            yield return Unity.Asyncs.Async2Coroutine(Stats);
         }
 
         public async Task Stats()
@@ -27,7 +27,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Version()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Version());
+            yield return Unity.Asyncs.Async2Coroutine(Version);
         }
 
         public async Task Version()

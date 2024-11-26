@@ -70,7 +70,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Replace_Entire_Config()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Replace_Entire_Config());
+            yield return Unity.Asyncs.Async2Coroutine(Replace_Entire_Config);
         }
 
         public async Task Replace_Entire_Config()

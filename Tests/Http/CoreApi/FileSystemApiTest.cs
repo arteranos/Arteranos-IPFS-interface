@@ -16,7 +16,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_AddText()
         {
-            yield return Unity.Asyncs.Async2Coroutine(AddText());
+            yield return Unity.Asyncs.Async2Coroutine(AddText);
         }
 
         public async Task AddText()
@@ -29,7 +29,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_ReadText()
         {
-            yield return Unity.Asyncs.Async2Coroutine(ReadText());
+            yield return Unity.Asyncs.Async2Coroutine(ReadText);
         }
 
         public async Task ReadText()
@@ -43,7 +43,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_AddFile()
         {
-            yield return Unity.Asyncs.Async2Coroutine(AddFile());
+            yield return Unity.Asyncs.Async2Coroutine(AddFile);
         }
 
         public async Task AddFile()
@@ -66,7 +66,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_AddFile_Large()
         {
-            yield return Unity.Asyncs.Async2Coroutine(AddFile_Large());
+            yield return Unity.Asyncs.Async2Coroutine(AddFile_Large);
         }
 
         public async Task AddFile_Large()
@@ -89,7 +89,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Read_With_Offset()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset());
+            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset);
         }
 
         public async Task Read_With_Offset()
@@ -108,7 +108,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Read_With_Offset_Length_1()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset_Length_1());
+            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset_Length_1);
         }
 
         public async Task Read_With_Offset_Length_1()
@@ -126,7 +126,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Read_With_Offset_Length_2()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset_Length_2());
+            yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset_Length_2);
         }
 
         public async Task Read_With_Offset_Length_2()
@@ -145,7 +145,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_NoPin()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_NoPin());
+            yield return Unity.Asyncs.Async2Coroutine(Add_NoPin);
         }
 
         public async Task Add_NoPin()
@@ -161,7 +161,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_Wrap()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_Wrap());
+            yield return Unity.Asyncs.Async2Coroutine(Add_Wrap);
         }
 
         public async Task Add_Wrap()
@@ -192,7 +192,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_SizeChunking()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_SizeChunking());
+            yield return Unity.Asyncs.Async2Coroutine(Add_SizeChunking);
         }
 
         public async Task Add_SizeChunking()
@@ -221,7 +221,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_Raw()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_Raw());
+            yield return Unity.Asyncs.Async2Coroutine(Add_Raw);
         }
 
         public async Task Add_Raw()
@@ -242,7 +242,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_Add_RawAndChunked()
         {
-            yield return Unity.Asyncs.Async2Coroutine(Add_RawAndChunked());
+            yield return Unity.Asyncs.Async2Coroutine(Add_RawAndChunked);
         }
 
         public async Task Add_RawAndChunked()
@@ -271,7 +271,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_AddDirectory()
         {
-            yield return Unity.Asyncs.Async2Coroutine(AddDirectory());
+            yield return Unity.Asyncs.Async2Coroutine(AddDirectory);
         }
 
         public async Task AddDirectory()
@@ -322,7 +322,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_AddDirectoryRecursive()
         {
-            yield return Unity.Asyncs.Async2Coroutine(AddDirectoryRecursive());
+            yield return Unity.Asyncs.Async2Coroutine(AddDirectoryRecursive);
         }
 
         public async Task AddDirectoryRecursive()
@@ -376,7 +376,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_GetTar_EmptyDirectory()
         {
-            yield return Unity.Asyncs.Async2Coroutine(GetTar_EmptyDirectory());
+            yield return Unity.Asyncs.Async2Coroutine(GetTar_EmptyDirectory);
         }
 
         public async Task GetTar_EmptyDirectory()
@@ -412,7 +412,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_AddFile_WithProgress()
         {
-            yield return Unity.Asyncs.Async2Coroutine(AddFile_WithProgress());
+            yield return Unity.Asyncs.Async2Coroutine(AddFile_WithProgress);
         }
 
         public async Task AddFile_WithProgress()

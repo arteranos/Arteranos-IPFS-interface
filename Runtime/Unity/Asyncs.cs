@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -28,22 +29,47 @@ namespace Ipfs.Unity
             return true;
         }
 
-        [Obsolete("Obsoleted in favor of Func<Task<T>> because of embedded ConfigureAwait(false)")]
+        [Obsolete("Use Func<Task<T>>")]
         public static IEnumerator Async2Coroutine<T>(Task<T> task, Action<T> callback, Action<Exception> failCallback = null)
         {
-            yield return new WaitUntil(() => task.IsCompleted);
+            var taskCA = task.ConfigureAwait(false).GetAwaiter();
+            yield return new WaitUntil(() => taskCA.IsCompleted);
 
             if (!CatchFaulted(task, failCallback))
                 callback?.Invoke(task.Result);
         }
 
-        [Obsolete("Obsoleted in favor of Func<Task> because of embedded ConfigureAwait(false)")]
+        public static IEnumerator Async2Coroutine<T>(Func<Task<T>> taskFunc, Action<T> callback, Action<Exception> failCallback = null)
+        {
+            Task<T> task = Task.Run<T>(async () => 
+            {
+                return await taskFunc().ConfigureAwait(false);
+            });
+            var taskCA = task.ConfigureAwait(false).GetAwaiter();
+            yield return new WaitUntil(() => taskCA.IsCompleted);
+
+            if (!CatchFaulted(task, failCallback))
+                callback?.Invoke(task.Result);
+        }
+
+        [Obsolete("Use Func<Task>")]
         public static IEnumerator Async2Coroutine(Task task, Action<Exception> failCallback = null)
         {
-            yield return new WaitUntil(() => task.IsCompleted);
+            var taskCA = task.ConfigureAwait(false).GetAwaiter();
+            yield return new WaitUntil(() => taskCA.IsCompleted);
 
             CatchFaulted(task, failCallback);
         }
+        public static IEnumerator Async2Coroutine(Func<Task> taskFunc, Action<Exception> failCallback = null)
+        {
+            Task task = Task.Run(async () =>
+            {
+                await taskFunc().ConfigureAwait(false);
+            });
+            var taskCA = task.ConfigureAwait(false).GetAwaiter();
+            yield return new WaitUntil(() => taskCA.IsCompleted);
 
+            CatchFaulted(task, failCallback);
+        }
     }
 }
