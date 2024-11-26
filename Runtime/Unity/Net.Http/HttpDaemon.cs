@@ -117,8 +117,20 @@ namespace Unity.Net.Http
 
         private Task<CURLcode> PerformAsync(WebRequest request)
         {
-            return Task.Run(() => {
-                using SafeEasyHandle easy = CurlNative.Easy.Init();
+            return Task.Run(() =>
+            {
+                return Perform(request);
+            });
+        }
+
+        private static CURLcode Perform(WebRequest request)
+        {
+            //unsafe
+            {
+                SafeEasyHandle easy = CurlNative.Easy.Init();
+                SafeLPStr url = new(request.request.RequestUri.ToString());
+                SafeLPStr method = new(request.request.Method);
+                SafeLPStr agent = new("CurlThinner");
                 GCHandle requestHandle = GCHandle.Alloc(request);
                 IntPtr requestPtr = (IntPtr)requestHandle;
 
@@ -126,8 +138,6 @@ namespace Unity.Net.Http
 
                 // Slist headers = null;
 
-                CurlNative.Easy.SetOpt(easy, CURLoption.URL, request.request.RequestUri.ToString());
-                CurlNative.Easy.SetOpt(easy, CURLoption.CUSTOMREQUEST, request.request.Method);
 
                 SafeSlistHandle headers = null;
                 GCHandle pinnedContentBlob = default;
@@ -161,7 +171,9 @@ namespace Unity.Net.Http
                 CurlNative.Easy.SetOpt(easy, CURLoption.HEADERDATA, requestPtr);
                 CurlNative.Easy.SetOpt(easy, CURLoption.HEADERFUNCTION, WrapWriteHandler(GotHeaderData));
 
-                CurlNative.Easy.SetOpt(easy, CURLoption.USERAGENT, "CurlThinner");
+                CurlNative.Easy.SetOpt(easy, CURLoption.URL, url);
+                CurlNative.Easy.SetOpt(easy, CURLoption.CUSTOMREQUEST, method);
+                CurlNative.Easy.SetOpt(easy, CURLoption.USERAGENT, agent);
 
 
                 // if(headers != null) CurlNative.Easy.SetOpt(easy, CURLoption.HTTPHEADER, headers);
@@ -192,8 +204,8 @@ namespace Unity.Net.Http
 
                 request.stage = ProcessStage.ContentReceived;
 
-                return request.performResult;
-            });
+            }
+            return request.performResult;
         }
 
         private static CurlNative.Easy.DataHandler WrapWriteHandler(Func<byte[], IntPtr, int> func)

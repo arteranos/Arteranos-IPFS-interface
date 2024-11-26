@@ -43,8 +43,9 @@ namespace CurlThin
             [DllImport(LIBCURL, EntryPoint = "curl_easy_setopt")]
             public static extern CURLcode SetOpt(SafeEasyHandle handle, CURLoption option, IntPtr value);
 
-            [DllImport(LIBCURL, EntryPoint = "curl_easy_setopt", CharSet = CharSet.Ansi)]
-            public static extern CURLcode SetOpt(SafeEasyHandle handle, CURLoption option, string value);
+            // Intentionally left out. string is a floating data item and _may_ move around my the GC before the action commences.
+            //[DllImport(LIBCURL, EntryPoint = "curl_easy_setopt", CharSet = CharSet.Ansi)]
+            //public static extern CURLcode SetOpt(SafeEasyHandle handle, CURLoption option, string value);
 
             [DllImport(LIBCURL, EntryPoint = "curl_easy_setopt")]
             public static extern CURLcode SetOpt(SafeEasyHandle handle, CURLoption option, DataHandler value);
