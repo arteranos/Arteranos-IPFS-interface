@@ -16,7 +16,7 @@ namespace Ipfs.Http
         [Ignore("Peer may be likely nonexistent or rekeyed")]
         public System.Collections.IEnumerator Async_FindPeer()
         {
-            yield return Unity.Asyncs.Async2Coroutine(FindPeer());
+            yield return Unity.Asyncs.Async2Coroutine(FindPeer);
         }
 
         public async Task FindPeer()
@@ -32,7 +32,7 @@ namespace Ipfs.Http
         [UnityTest]
         public System.Collections.IEnumerator Async_FindProviders()
         {
-            yield return Unity.Asyncs.Async2Coroutine(FindProviders());
+            yield return Unity.Asyncs.Async2Coroutine(FindProviders);
         }
 
         public async Task FindProviders()

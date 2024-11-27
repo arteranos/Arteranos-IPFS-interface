@@ -34,7 +34,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(ipfs);
 
             JToken IdString = null;
-            yield return Asyncs.Async2Coroutine(ipfs.Config.GetAsync("Identity.PeerID"), _r => IdString = _r);
+            yield return Asyncs.Async2Coroutine(() => ipfs.Config.GetAsync("Identity.PeerID"), _r => IdString = _r);
 
             Assert.IsNotNull(IdString);
             Debug.Log(IdString);
@@ -49,7 +49,7 @@ namespace Ipfs.Http
             PrivateKey pk = IpfsClientEx.ReadDaemonPrivateKey();
             Assert.IsNotNull(pk);
 
-            yield return Asyncs.Async2Coroutine(ipfs.VerifyDaemonAsync(pk));
+            yield return Asyncs.Async2Coroutine(() => ipfs.VerifyDaemonAsync(pk));
         }
 
         [UnityTest]
@@ -64,7 +64,7 @@ namespace Ipfs.Http
             Assert.IsNotNull(pk);
 
             Exception e = null;
-            yield return Asyncs.Async2Coroutine(ipfs.VerifyDaemonAsync(pk), _e => e = _e);
+            yield return Asyncs.Async2Coroutine(() => ipfs.VerifyDaemonAsync(pk), _e => e = _e);
             Assert.Throws<InvalidDataException>(() => throw e);
         }
     }
