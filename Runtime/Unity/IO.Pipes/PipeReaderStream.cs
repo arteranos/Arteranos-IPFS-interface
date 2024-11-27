@@ -26,12 +26,33 @@ namespace Unity.IO.Pipes
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return _pipe.ReadInternal(new Memory<byte>(buffer, offset, count), default);
+            return Task.Run<int>(() =>
+            {
+                return _pipe.ReadInternal(new Memory<byte>(buffer, offset, count), default);
+            }).Result;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotSupportedException();
+        }
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                return _pipe.ReadInternal(new Memory<byte>(buffer, offset, count), cancellationToken);
+            });
+        }
+
+        public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
+        {
+            return base.CopyToAsync(destination, bufferSize, cancellationToken);
+        }
+
+        public override void CopyTo(Stream destination, int bufferSize)
+        {
+            base.CopyTo(destination, bufferSize);
         }
 
         public override void SetLength(long value)

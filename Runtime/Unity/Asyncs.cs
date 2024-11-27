@@ -28,6 +28,7 @@ namespace Ipfs.Unity
             return true;
         }
 
+        [Obsolete("Obsoleted in favor of Func<Task<T>> because of embedded ConfigureAwait(false)")]
         public static IEnumerator Async2Coroutine<T>(Task<T> task, Action<T> callback, Action<Exception> failCallback = null)
         {
             yield return new WaitUntil(() => task.IsCompleted);
@@ -36,6 +37,7 @@ namespace Ipfs.Unity
                 callback?.Invoke(task.Result);
         }
 
+        [Obsolete("Obsoleted in favor of Func<Task> because of embedded ConfigureAwait(false)")]
         public static IEnumerator Async2Coroutine(Task task, Action<Exception> failCallback = null)
         {
             yield return new WaitUntil(() => task.IsCompleted);

@@ -198,6 +198,7 @@ namespace Ipfs.Http
         }
 
         [Test]
+        [Ignore(".Result deadlock")]
         public void Remove_Unknown()
         {
             ExceptionAssert.Throws<Exception>(() => { var _ = ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF").Result; });

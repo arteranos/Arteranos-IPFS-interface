@@ -19,22 +19,37 @@ namespace Unity.IO.Pipes
         public Stream writeStream => new PipeWriterStream(this);
 
         private ConcurrentQueue<PipeChunk> _chunks = new();
-        private bool _writeEOF = false;
-        private bool _readEOF = false;
+        private volatile bool _writeEOF = false;
+        private volatile bool _readEOF = false;
 
+        private Guid _guid = Guid.NewGuid();
+
+        private int tasknum = 0;
         internal int ReadInternal(Memory<byte> buffer, CancellationToken cancel)
         {
             ThrowIfDisposed();
 
-            // Debug.Log($"Pipe read, wants {buffer.Length}");
+            if (!Thread.CurrentThread.IsBackground)
+                Debug.LogWarning("In main thread!");
+
+            int current = tasknum++;
+
+            // Debug.Log($"Pipe {_guid.ToString()} read {current}, wants {buffer.Length}");
             PipeChunk chunk = null;
-            while(!cancel.IsCancellationRequested && !_chunks.TryPeek(out chunk) && !_readEOF)
+            int tmo = 0;
+            while(!_readEOF && tmo++ < 5000)
             {
-                Thread.Yield();
+                if (_chunks.TryPeek(out chunk)) break;
+                if(cancel.IsCancellationRequested) throw new TaskCanceledException();
+                Thread.Sleep(1);                
             }
 
-            if(cancel.IsCancellationRequested)
-                throw new TaskCanceledException();
+            if(tmo >= 1000)
+            {
+                Debug.LogWarning($"... Timeout deadlock !!!");
+                _readEOF = true;
+                return 0;
+            }
 
             if (chunk == null)
             {
@@ -72,7 +87,7 @@ namespace Unity.IO.Pipes
             if(buffer.Length == 0) return;
 
             _chunks.Enqueue(new() { data = buffer, consumed = 0 });
-            // Debug.Log($"Enqueued {buffer.Length} bytes");
+            // Debug.Log($"Pipe {_guid.ToString()} Enqueued {buffer.Length} bytes");
             return;
         }
 
@@ -84,7 +99,7 @@ namespace Unity.IO.Pipes
                 _chunks.Enqueue(null);
             _writeEOF = true;
 
-            // Debug.Log("Enqueued EOF");
+            // Debug.Log($"Pipe {_guid.ToString()} Enqueued EOF");
         }
 
         // ---------------------------------------------------------------
@@ -98,6 +113,8 @@ namespace Unity.IO.Pipes
             _disposed = true;
 
             _readEOF = true;
+            if (_chunks.Count > 0)
+                Debug.Log($"Pipe {_guid.ToString()} Discarding data in pipe, {_chunks.Count} chunks");
         }
 
         private void ThrowIfDisposed()
