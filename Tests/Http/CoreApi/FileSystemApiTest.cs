@@ -41,6 +41,47 @@ namespace Ipfs.Http
         }
 
         [UnityTest]
+        public System.Collections.IEnumerator Async_ReadFile_Large()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(ReadFile_Large);
+        }
+
+        public async Task ReadFile_Large()
+        {
+            var path = "Packages/com.willneedit.ipfs.iface/Tests/halloween_pumpkin.glb";
+
+            var ipfs = TestFixture.Ipfs;
+            var node = await ipfs.FileSystem.AddFileAsync(path);
+            Assert.AreEqual("QmZLCE2E2c5WmG2bkeUPEypcqcp8xUpxSMzK5mgjUKSg4p", (string)node.Id);
+
+            Stream stream = await ipfs.FileSystem.ReadFileAsync(node.Id);
+            Stream refStream = File.OpenRead(path);
+
+            byte[] buffer1 = new byte[64 * 1024];
+            byte[] buffer2 = new byte[64 * 1024];
+            while(true)
+            {
+                int n1 = stream.Read(buffer1, 0, buffer1.Length);
+                if (n1 == 0) break;
+
+                int n2 = refStream.Read(buffer2, 0, n1);
+
+                if(n1 != n2)
+                {
+                    Assert.Fail("Differing length");
+                    return;
+                }
+
+                for(int i = 0; i < n1; i++)
+                    if(buffer1[i] != buffer2[i])
+                    {
+                        Assert.Fail("Differing contents");
+                        return;
+                    }
+            }
+        }
+
+        [UnityTest]
         public System.Collections.IEnumerator Async_AddFile()
         {
             yield return Unity.Asyncs.Async2Coroutine(AddFile);
