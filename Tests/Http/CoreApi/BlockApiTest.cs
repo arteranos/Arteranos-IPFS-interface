@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Net.Http;
 
 namespace Ipfs.Http
 {
@@ -197,11 +198,12 @@ namespace Ipfs.Http
             Assert.AreEqual(id, (string)cid);
         }
 
-        [Test]
-        [Ignore(".Result deadlock")]
-        public void Remove_Unknown()
+        [UnityTest]
+        public System.Collections.IEnumerator Remove_Unknown()
         {
-            ExceptionAssert.Throws<Exception>(() => { var _ = ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF").Result; });
+            Exception ex = null;
+            yield return Unity.Asyncs.Async2Coroutine(() => ipfs.Block.RemoveAsync("QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rFF"), _ex => ex = _ex);
+            ExceptionAssert.Throws<HttpRequestException>(() => { if (ex != null) throw ex; });
         }
 
         [UnityTest]
