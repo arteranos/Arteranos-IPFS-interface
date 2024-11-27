@@ -29,6 +29,9 @@ namespace Ipfs.Unity
             return true;
         }
 
+        public delegate Task TaskProducer();
+        public delegate Task<T> TaskProducer<T>();
+
         [Obsolete("Use Func<Task<T>>")]
         public static IEnumerator Async2Coroutine<T>(Task<T> task, Action<T> callback, Action<Exception> failCallback = null)
         {
@@ -39,7 +42,7 @@ namespace Ipfs.Unity
                 callback?.Invoke(task.Result);
         }
 
-        public static IEnumerator Async2Coroutine<T>(Func<Task<T>> taskFunc, Action<T> callback, Action<Exception> failCallback = null)
+        public static IEnumerator Async2Coroutine<T>(TaskProducer<T> taskFunc, Action<T> callback, Action<Exception> failCallback = null)
         {
             Task<T> task = Task.Run<T>(async () => 
             {
@@ -60,7 +63,7 @@ namespace Ipfs.Unity
 
             CatchFaulted(task, failCallback);
         }
-        public static IEnumerator Async2Coroutine(Func<Task> taskFunc, Action<Exception> failCallback = null)
+        public static IEnumerator Async2Coroutine(TaskProducer taskFunc, Action<Exception> failCallback = null)
         {
             Task task = Task.Run(async () =>
             {

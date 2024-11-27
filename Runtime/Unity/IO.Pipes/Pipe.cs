@@ -36,19 +36,11 @@ namespace Unity.IO.Pipes
 
             // Debug.Log($"Pipe {_guid.ToString()} read {current}, wants {buffer.Length}");
             PipeChunk chunk = null;
-            int tmo = 0;
-            while(!_readEOF && tmo++ < 5000)
+            while(!_readEOF)
             {
                 if (_chunks.TryPeek(out chunk)) break;
                 if(cancel.IsCancellationRequested) throw new TaskCanceledException();
                 Thread.Sleep(1);                
-            }
-
-            if(tmo >= 1000)
-            {
-                Debug.LogWarning($"... Timeout deadlock !!!");
-                _readEOF = true;
-                return 0;
             }
 
             if (chunk == null)
