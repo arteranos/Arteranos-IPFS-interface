@@ -64,6 +64,29 @@ namespace Ipfs.Http
         }
 
         [UnityTest]
+        public System.Collections.IEnumerator Async_AddFile_Large()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(AddFile_Large());
+        }
+
+        public async Task AddFile_Large()
+        {
+            var path = "Packages/com.willneedit.ipfs.iface/Tests/halloween_pumpkin.glb";
+
+            try
+            {
+                var ipfs = TestFixture.Ipfs;
+                var result = await ipfs.FileSystem.AddFileAsync(path);
+                Assert.AreEqual("QmZLCE2E2c5WmG2bkeUPEypcqcp8xUpxSMzK5mgjUKSg4p", (string)result.Id);
+                Assert.AreEqual(0, result.Links.Count());
+            }
+            finally
+            {
+                // Nothing to clean up
+            }
+        }
+
+        [UnityTest]
         public System.Collections.IEnumerator Async_Read_With_Offset()
         {
             yield return Unity.Asyncs.Async2Coroutine(Read_With_Offset());
