@@ -1,0 +1,3 @@
+[submodule "PluginsGen~/curl"]
+	path = PluginsGen~/curl
+	url = https://github.com/curl/curl.git

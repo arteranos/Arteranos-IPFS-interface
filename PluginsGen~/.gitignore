@@ -2,6 +2,8 @@
 bin/
 obj/
 packages/
+Debug/
+x64/Debug/
 
 !*.csproj
 !*.sln
