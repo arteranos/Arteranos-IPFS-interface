@@ -1,0 +1,16 @@
+{
+    "name": "Curly.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:78f0bfe22b5b6b64799a8fa583c39018"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
