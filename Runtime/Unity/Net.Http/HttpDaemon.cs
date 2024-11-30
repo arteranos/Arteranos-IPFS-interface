@@ -6,21 +6,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using Curly;
+using System.Runtime.InteropServices;
+using Unity.IO.Pipes;
 
 namespace Unity.Net.Http
 {
     public class HttpDaemon : MonoBehaviour
     {
-        internal class WebRequest
-        {
-            public HttpRequestMessage request = null;
-            public volatile bool done = false;
-            public volatile DownloadHandlerStream downloadHandler = null;
-            public volatile Exception exception = null;
-        }
-
         public static HttpDaemon Instance { get; private set; } = null;
 
+        private Curly.Curl _Curl = null;
         public static void EnsureRunning()
         {
             if(Instance != null) return;
@@ -28,101 +24,135 @@ namespace Unity.Net.Http
             throw new InvalidOperationException("No HTTP Daemon - Add the HTTP Daemon to the GameObject");
         }
 
-        private void Awake()
+        public void Awake()
         {
             Instance = this;
+            _Curl = new();
         }
 
-        private ConcurrentQueue<WebRequest> WebRequestQueue = new();
-
-        private void Update()
+        public void OnDestroy()
         {
-            if (WebRequestQueue.TryDequeue(out WebRequest request))
-                StartCoroutine(ProcessWebRequest(request));
+            Instance = null;
+            _Curl.Dispose();
         }
 
-        private static IEnumerator ProcessWebRequest(WebRequest incoming)
+        public class ProgressData
         {
-            incoming.downloadHandler = new DownloadHandlerStream();
-            HttpRequestMessage httpRequest = incoming.request;
+            public Pipe responseInputPipe = null;
+            public Easy easy = null;
+            public int totalBytes = 0;
+            public int responseCode = 0;
+            public string contentType = null;
+        }
 
-            UploadHandler uploadHandler = null;
-            
-
-            HttpContent sendContent = httpRequest.Content;
-            if (sendContent != null)
+        public static int DataReadFunc(ProgressData pd, byte[] buffer)
+        {
+            if (pd.totalBytes == 0)
             {
-                Task<byte[]> taskContentBlob = sendContent.ReadAsByteArrayAsync();
+                pd.easy.GetInfo(CURLINFO.RESPONSE_CODE, out int statusCode);
+                pd.easy.GetInfo(CURLINFO.CONTENT_TYPE, out string contentType);
 
-                yield return new WaitUntil(() => taskContentBlob.IsCompleted);
+                pd.responseCode = statusCode;
+                pd.contentType = contentType;
 
-                uploadHandler = new UploadHandlerRaw(taskContentBlob.Result);
-
-                // Multipart contents need their boundary marker
-                if(sendContent is MultipartFormDataContent mp)
-                    uploadHandler.contentType = $"{sendContent.Headers.ContentType.MediaType}; boundary=\"{mp.Boundary}\"";
-                else
-                    uploadHandler.contentType = sendContent.Headers.ContentType.MediaType;
+                //Debug.Log("Starting to receive content");
+                //Debug.Log($"HTTP Status code: {statusCode}");
+                //Debug.Log($"Content type: {contentType}");
             }
 
-            using UnityWebRequest uwr = new(
-                httpRequest.RequestUri, 
-                httpRequest.Method, 
-                incoming.downloadHandler, 
-                uploadHandler);
-            incoming.downloadHandler.Request = uwr;
-
-            UnityWebRequestAsyncOperation uwrAo = uwr.SendWebRequest();
-
-            // Allow the worker task to break out as soon as the content starts to arrive
-            if (httpRequest.CompletionOption == HttpCompletionOption.ResponseHeadersRead)
-                incoming.done = true;
-
-            yield return uwrAo;
-
-            incoming.exception = uwr.result switch
-            {
-                UnityWebRequest.Result.InProgress => new InvalidOperationException(), // Should never happen, after the 'yield return'
-                UnityWebRequest.Result.Success => null,
-                UnityWebRequest.Result.ConnectionError => new HttpRequestException(uwr.error),
-                UnityWebRequest.Result.ProtocolError => null,
-                UnityWebRequest.Result.DataProcessingError => new HttpRequestException(uwr.error),
-                _ => new NotSupportedException(),
-            };
-
-            // All done.
-            incoming.done = true;
+            pd.responseInputPipe.Write(new(buffer));
+            pd.totalBytes += buffer.Length;
+            return buffer.Length;
         }
 
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequest, HttpCompletionOption hco, CancellationToken cancel = default)
+        public HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancel = default)
         {
-            httpRequest.CompletionOption = hco;
-            WebRequest request = new() { request = httpRequest };
+            byte[] postContent = null;
 
-            WebRequestQueue.Enqueue(request);
+            if (request.Content != null)
+            {
+                using MemoryStream ms = new();
+                Stream inStream = request.Content.ReadAsStreamAsync().Result;
+                inStream.CopyTo(ms);
+                postContent = ms.ToArray();
+            }
 
-            while (true)
+            Pipe responseInputPipe = new();
+            ProgressData progressData = new()
+            {
+                responseInputPipe = responseInputPipe,
+            };
+
+            Task<CURLcode> taskResult = Task.Run(() => {
+                try
+                {
+                    using Easy easy = _Curl.GetEasy();
+                    using Slist headers = new();
+
+                    progressData.easy = easy;
+                    DataCallbackFunc dataCopier = new(b => DataReadFunc(progressData, b));
+
+                    easy.SetOpt(CURLoption.URL, request.RequestUri.ToString());
+                    easy.SetOpt(CURLoption.CUSTOMREQUEST, request.Method);
+                    easy.SetOpt(CURLoption.WRITEFUNCTION, dataCopier.DataHandler);
+                    easy.SetOpt(CURLoption.USERAGENT, "Curly/0.1");
+
+                    if (postContent != null)
+                    {
+                        headers.Add($"Content-Type: {request.Content.Headers.ContentType}");
+                        easy.SetOpt(CURLoption.HTTPHEADER, headers);
+                        easy.SetOpt(CURLoption.POSTFIELDSIZE, postContent.Length);
+                        easy.SetOpt(CURLoption.COPYPOSTFIELDS, postContent);
+                    }
+
+                    CURLcode result = easy.Perform();
+                    // In case if we don't get any content and we haven't the chance to
+                    // glean the response code.
+                    if(result == CURLcode.OK)
+                        easy.GetInfo(CURLINFO.RESPONSE_CODE, out progressData.responseCode);
+                    return result;
+                }
+                finally
+                {
+                    progressData.responseInputPipe.CloseWrite();
+                }
+            });
+
+            while(true)
             {
                 if (cancel.IsCancellationRequested) throw new TaskCanceledException();
-                if (request.exception != null) throw request.exception;
 
-                // Only if the worker says we're good to go and there is a status code
-                // has arrived
-                if (request.done && request.downloadHandler?.StatusCode != 0) break;
+                if (progressData.responseCode != 0 && request.CompletionOption == HttpCompletionOption.ResponseHeadersRead) break;
 
-                await Task.Yield();
+                if (taskResult.IsCompleted) break;
+
+                Thread.Sleep(10);
             }
 
-            HttpContent responseContent = new StreamContent(request.downloadHandler.GetStream());
+            if (taskResult.IsFaulted) throw new HttpRequestException(taskResult.Exception.Message);
 
-            HttpResponseMessage response = new()
+            // Not completed yet if we stop at the header.
+            if (taskResult.IsCompleted)
             {
-                RequestMessage = httpRequest,
-                Content = responseContent,
-                StatusCode = (System.Net.HttpStatusCode)request.downloadHandler.StatusCode
-            };
+                CURLcode result = taskResult.Result;
+                if (result != CURLcode.OK) throw new HttpRequestException($"Result code: {Curly.Curl.StrError(result)} ({(int)result}).");
+            }
 
-            return response;
+            return new HttpResponseMessage()
+            {
+                RequestMessage = request,
+                Content = new StreamContent(responseInputPipe.ReadStream),
+                StatusCode = (System.Net.HttpStatusCode)progressData.responseCode
+            };
+        }
+
+        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequest, HttpCompletionOption hco, CancellationToken cancel = default)
+        {
+            httpRequest.CompletionOption = hco;
+
+            return Task.Run(() => {
+                return Send(httpRequest, cancel);
+            });
         }
 
     }

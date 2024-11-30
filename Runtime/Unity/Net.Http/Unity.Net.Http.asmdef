@@ -2,7 +2,8 @@
     "name": "Unity.Net.Http",
     "rootNamespace": "Unity.Net.Http",
     "references": [
-        "GUID:8cfbf7cd1b5377f478c8d27f7ea0ee54"
+        "GUID:8cfbf7cd1b5377f478c8d27f7ea0ee54",
+        "GUID:78f0bfe22b5b6b64799a8fa583c39018"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
