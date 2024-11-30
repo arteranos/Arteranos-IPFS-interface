@@ -43,6 +43,24 @@ namespace Unity.Net.Http
             public int totalBytes = 0;
             public int responseCode = 0;
             public string contentType = null;
+            public bool headerDetected = false;
+        }
+
+        public static int HeaderScannerFunc(ProgressData pd, byte[] buffer)
+        {
+            // Blank line after header...
+            if(buffer.Length == 2 && buffer[0] == 0x0d && buffer[1] == 0x0a)
+            {
+                // ... and something substantial ...
+                pd.easy.GetInfo(CURLINFO.RESPONSE_CODE, out int statusCode);
+
+                // Debug.Log($"Header finished {statusCode}");
+
+                // ... then notify the chance for the early exit.
+                if (statusCode > 199) pd.headerDetected = true;
+            }
+
+            return buffer.Length;
         }
 
         public static int DataReadFunc(ProgressData pd, byte[] buffer)
@@ -90,10 +108,12 @@ namespace Unity.Net.Http
                     using Slist headers = new();
 
                     progressData.easy = easy;
-                    DataCallbackFunc dataCopier = new(b => DataReadFunc(progressData, b));
+                    using DataCallbackFunc dataCopier = new(b => DataReadFunc(progressData, b));
+                    using DataCallbackFunc headerScanner = new(b => HeaderScannerFunc(progressData, b));
 
                     easy.SetOpt(CURLoption.URL, request.RequestUri.ToString());
                     easy.SetOpt(CURLoption.CUSTOMREQUEST, request.Method);
+                    easy.SetOpt(CURLoption.HEADERFUNCTION, headerScanner.DataHandler);
                     easy.SetOpt(CURLoption.WRITEFUNCTION, dataCopier.DataHandler);
                     easy.SetOpt(CURLoption.USERAGENT, "Curly/0.1");
 
@@ -122,7 +142,7 @@ namespace Unity.Net.Http
             {
                 if (cancel.IsCancellationRequested) throw new TaskCanceledException();
 
-                if (progressData.responseCode != 0 && request.CompletionOption == HttpCompletionOption.ResponseHeadersRead) break;
+                if (progressData.headerDetected && request.CompletionOption == HttpCompletionOption.ResponseHeadersRead) break;
 
                 if (taskResult.IsCompleted) break;
 
