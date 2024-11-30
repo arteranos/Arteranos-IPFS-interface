@@ -57,7 +57,11 @@ namespace Unity.Net.Http
                 // Debug.Log($"Header finished {statusCode}");
 
                 // ... then notify the chance for the early exit.
-                if (statusCode > 199) pd.headerDetected = true;
+                if (statusCode > 199)
+                {
+                    pd.responseCode = statusCode;
+                    pd.headerDetected = true;
+                }
             }
 
             return buffer.Length;
