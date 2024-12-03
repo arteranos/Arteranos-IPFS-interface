@@ -10,6 +10,8 @@ namespace Ipfs.Http
     [TestFixture]
     public class NameApiTest : TestFixture
     {
+        private const string keyName = "name-publish-test";
+
         [Test]
         public void Api_Exists()
         {
@@ -41,10 +43,11 @@ namespace Ipfs.Http
             var ipfs = TestFixture.Ipfs;
             var cs = new CancellationTokenSource(TimeSpan.FromMinutes(5));
             var content = await ipfs.FileSystem.AddTextAsync("hello world");
-            var key = await ipfs.Key.CreateAsync("name-publish-test", "rsa", 2048);
 
             try
             {
+                var key = await ipfs.Key.CreateAsync(keyName, "rsa", 2048);
+
                 var result = await ipfs.Name.PublishAsync(content.Id, key.Name, cancel: cs.Token);
                 Assert.IsNotNull(result);
 
@@ -53,7 +56,7 @@ namespace Ipfs.Http
             }
             finally
             {
-                await ipfs.Key.RemoveAsync(key.Name);
+                await ipfs.Key.RemoveAsync(keyName);
             }
         }
 
