@@ -17,6 +17,7 @@ namespace Unity.Net.Http
         public static HttpDaemon Instance { get; private set; } = null;
 
         private Curly.Curl _Curl = null;
+        private bool SCRAM = false;
         public static void EnsureRunning()
         {
             if(Instance != null) return;
@@ -33,6 +34,8 @@ namespace Unity.Net.Http
         public void OnDestroy()
         {
             Instance = null;
+            SCRAM = true;
+
             _Curl.Dispose();
         }
 
@@ -89,6 +92,8 @@ namespace Unity.Net.Http
 
         public HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancel = default)
         {
+            CancellationTokenSource tokenSource = new();
+
             byte[] postContent = null;
 
             if (request.Content != null)
@@ -106,9 +111,11 @@ namespace Unity.Net.Http
             };
 
             Task<CURLcode> taskResult = Task.Run(() => {
+                using Multi multi = new();
+                Easy easy = _Curl.GetEasy();
+
                 try
                 {
-                    using Easy easy = _Curl.GetEasy();
                     using Slist headers = new();
 
                     progressData.easy = easy;
@@ -129,22 +136,39 @@ namespace Unity.Net.Http
                         easy.SetOpt(CURLoption.COPYPOSTFIELDS, postContent);
                     }
 
-                    CURLcode result = easy.Perform();
-                    // In case if we don't get any content and we haven't the chance to
-                    // glean the response code.
-                    if(result == CURLcode.OK)
-                        easy.GetInfo(CURLINFO.RESPONSE_CODE, out progressData.responseCode);
-                    return result;
+                    multi.AddHandle(easy);
+
+                    int still_running = 0;
+                    while (true)
+                    {
+                        if (tokenSource.Token.IsCancellationRequested || SCRAM)
+                            return CURLcode.ABORTED_BY_CALLBACK;
+
+                        CURLMcode mc = multi.Perform(ref still_running);
+
+                        if (still_running == 0) break;
+
+                        if (mc == CURLMcode.OK) mc = multi.Poll(1000);
+                    }
                 }
                 finally
                 {
                     progressData.responseInputPipe.CloseWrite();
+
+                    multi.RemoveHandle(easy);
+                    easy.Dispose();
                 }
+
+                return CURLcode.OK;
             });
 
             while(true)
             {
-                if (cancel.IsCancellationRequested) throw new TaskCanceledException();
+                if (cancel.IsCancellationRequested)
+                {
+                    tokenSource.Cancel();
+                    throw new TaskCanceledException();
+                }
 
                 if (progressData.headerDetected && request.CompletionOption == HttpCompletionOption.ResponseHeadersRead) break;
 
