@@ -5,7 +5,6 @@ namespace Curly
     /// <summary>
     ///     Reference: https://github.com/curl/curl/blob/master/include/curl/multi.h
     /// </summary>
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum CURLMcode
     {
         /// <summary>

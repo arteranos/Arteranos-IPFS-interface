@@ -38,6 +38,7 @@ namespace Curly
         }
 
         // ---------------------------------------------------------------
+        private bool _disposed = false;
         public void Dispose()
         {
             GC.SuppressFinalize(this);
@@ -48,11 +49,17 @@ namespace Curly
         {
             lock (this)
             {
+                _disposed = true;
                 // if (disposing) /* cleanup managed resources */
                 // cleanup unmanaged resources
                 destructor?.Invoke(resource);
                 destructor = null;
             }
+        }
+
+        public void ThrowIfDisposed()
+        {
+            if (_disposed) throw new ObjectDisposedException(GetType().FullName);
         }
     }
 }

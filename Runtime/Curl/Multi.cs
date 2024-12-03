@@ -54,10 +54,20 @@ namespace Curly
             public static extern IntPtr InfoRead(IntPtr multiHandle, out int msgsInQueue);
 
             [DllImport(LIBCURL, EntryPoint = "curl_multi_socket_action")]
-            public static extern CURLMcode SocketAction(IntPtr multiHandle, SafeSocketHandle sockfd,
-                CURLcselect evBitmask,
-                out int runningHandles);
+            public static extern CURLMcode SocketAction(IntPtr multiHandle, SafeSocketHandle sockfd, CURLcselect evBitmask, out int runningHandles);
 
+            [DllImport(LIBCURL, EntryPoint = "curl_multi_perform")]
+            internal static extern CURLMcode Perform(IntPtr pmultiHandle, ref int runningHandles);
+
+            [DllImport(LIBCURL, EntryPoint = "curl_multi_poll")]
+            internal static extern CURLMcode Poll(IntPtr multiHandle, 
+                IntPtr /* fixed curl_waitfd[] */ extraFds, 
+                uint extra_fds, 
+                int timeout_ms, 
+                IntPtr /* fixed int */ numfds);
+
+            [DllImport(LIBCURL, EntryPoint = "curl_multi_wakeup")]
+            internal static extern CURLMcode Wakeup(IntPtr multiHandle);
         }
         public Multi() : base(
             () =>
@@ -80,5 +90,13 @@ namespace Curly
         public CURLMcode SetOpt(CURLMoption option, SocketCallback value) => Native.SetOpt(this, option, value);
         public IntPtr InfoRead(out int msgsInQueue) => Native.InfoRead(this, out msgsInQueue);
         public CURLMcode SocketAction(SafeSocketHandle sockfd, CURLcselect evBitmask, out int runningHandles) => Native.SocketAction(this, sockfd, evBitmask, out runningHandles);
+        public CURLMcode Perform(ref int runningHandles) => Native.Perform(this, ref runningHandles);
+        public CURLMcode Poll(int timeoutMs) => Native.Poll(this, IntPtr.Zero, 0, timeoutMs, IntPtr.Zero);
+        public CURLMcode Wakeup()
+        {
+            ThrowIfDisposed(); // Needed because of multithreading
+
+            return Native.Wakeup(this);
+        }
     }
 }
