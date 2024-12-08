@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Ipfs.Http
 {
@@ -124,6 +125,16 @@ namespace Ipfs.Http
             finally
             {
                 // Nothing to clean up
+            }
+        }
+
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddFile_Large_Repeat()
+        {
+            for(int i =  0; i < 40; i++)
+            {
+                UnityEngine.Debug.Log($"Round {i + 1} of 40...");
+                yield return Unity.Asyncs.Async2Coroutine(AddFile_Large);
             }
         }
 
@@ -364,6 +375,16 @@ namespace Ipfs.Http
         public System.Collections.IEnumerator Async_AddDirectoryRecursive()
         {
             yield return Unity.Asyncs.Async2Coroutine(AddDirectoryRecursive);
+        }
+
+        [UnityTest]
+        public System.Collections.IEnumerator Async_AddDirectoryRecursive_Repeat()
+        {
+            for (int i = 0; i < 40; i++)
+            {
+                UnityEngine.Debug.Log($"Round {i + 1} of 40...");
+                yield return Unity.Asyncs.Async2Coroutine(AddDirectoryRecursive);
+            }
         }
 
         public async Task AddDirectoryRecursive()
