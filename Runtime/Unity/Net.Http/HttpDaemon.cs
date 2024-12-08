@@ -92,7 +92,7 @@ namespace Unity.Net.Http
 
         public HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancel = default)
         {
-            CancellationTokenSource tokenSource = new();
+            CancellationTokenSource tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancel, CancellationToken.None);
 
             byte[] postContent = null;
 
