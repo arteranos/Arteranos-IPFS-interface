@@ -1,7 +1,7 @@
 {
   "name": "com.willneedit.ipfs.iface",
   "displayName": "IPFS RPC API interface",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "unity": "2021.3",
   "description": "IPFS RPC API interface for Arteranos",
   "repository": {
