@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -32,16 +31,6 @@ namespace Ipfs.Unity
         public delegate Task TaskProducer();
         public delegate Task<T> TaskProducer<T>();
 
-        [Obsolete("Use Func<Task<T>>")]
-        public static IEnumerator Async2Coroutine<T>(Task<T> task, Action<T> callback, Action<Exception> failCallback = null)
-        {
-            var taskCA = task.ConfigureAwait(false).GetAwaiter();
-            yield return new WaitUntil(() => taskCA.IsCompleted);
-
-            if (!CatchFaulted(task, failCallback))
-                callback?.Invoke(task.Result);
-        }
-
         public static IEnumerator Async2Coroutine<T>(TaskProducer<T> taskFunc, Action<T> callback, Action<Exception> failCallback = null)
         {
             Task<T> task = Task.Run<T>(async () => 
@@ -55,14 +44,6 @@ namespace Ipfs.Unity
                 callback?.Invoke(task.Result);
         }
 
-        [Obsolete("Use Func<Task>")]
-        public static IEnumerator Async2Coroutine(Task task, Action<Exception> failCallback = null)
-        {
-            var taskCA = task.ConfigureAwait(false).GetAwaiter();
-            yield return new WaitUntil(() => taskCA.IsCompleted);
-
-            CatchFaulted(task, failCallback);
-        }
         public static IEnumerator Async2Coroutine(TaskProducer taskFunc, Action<Exception> failCallback = null)
         {
             Task task = Task.Run(async () =>

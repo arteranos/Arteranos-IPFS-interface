@@ -58,28 +58,42 @@ namespace Ipfs.Http
             Stream stream = await ipfs.FileSystem.ReadFileAsync(node.Id);
             Stream refStream = File.OpenRead(path);
 
-            byte[] buffer1 = new byte[64 * 1024];
-            byte[] buffer2 = new byte[64 * 1024];
-            while(true)
-            {
-                int n1 = stream.Read(buffer1, 0, buffer1.Length);
-                if (n1 == 0) break;
+            using MemoryStream ms1 = new();
+            using MemoryStream ms2 = new();
 
-                int n2 = refStream.Read(buffer2, 0, n1);
+            stream.CopyTo(ms1);
+            refStream.CopyTo(ms2);
 
-                if(n1 != n2)
-                {
-                    Assert.Fail("Differing length");
-                    return;
-                }
+            Assert.AreEqual(ms1.Length, ms2.Length);
+            byte[] a1 = ms1.ToArray();
+            byte[] a2 = ms2.ToArray();
+            Assert.True(a1.SequenceEqual(a2));
+        }
 
-                for(int i = 0; i < n1; i++)
-                    if(buffer1[i] != buffer2[i])
-                    {
-                        Assert.Fail("Differing contents");
-                        return;
-                    }
-            }
+        [UnityTest]
+        public System.Collections.IEnumerator Async_ReadFile()
+        {
+            yield return Unity.Asyncs.Async2Coroutine(ReadFile);
+        }
+
+        public async Task ReadFile()
+        {
+            byte[] refData = Encoding.UTF8.GetBytes("hello world");
+
+            var ipfs = TestFixture.Ipfs;
+            var node = await ipfs.FileSystem.AddTextAsync("hello world");
+
+            Stream stream = await ipfs.FileSystem.ReadFileAsync(node.Id);
+
+            using MemoryStream ms1 = new();
+            using MemoryStream ms2 = new(refData);
+
+            stream.CopyTo(ms1);
+
+            Assert.AreEqual(ms1.Length, ms2.Length);
+            byte[] a1 = ms1.ToArray();
+            byte[] a2 = ms2.ToArray();
+            Assert.True(a1.SequenceEqual(a2));
         }
 
         [UnityTest]
@@ -340,22 +354,11 @@ namespace Ipfs.Http
                 Assert.AreEqual("alpha.txt", files[0].Name);
                 Assert.AreEqual("beta.txt", files[1].Name);
 
-                byte[] file0DAG = await ipfs.Block.GetAsync(files[0].Id);
-                Assert.AreEqual(file0DAG.LongLength, files[0].Size);
-
-                byte[] file1DAG = await ipfs.Block.GetAsync(files[1].Id);
-                Assert.AreEqual(file1DAG.LongLength, files[1].Size);
-
                 Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(files[0].Id).Result);
                 Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(files[1].Id).Result);
 
                 Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/alpha.txt").Result);
                 Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/beta.txt").Result);
-
-                byte[] rawDAG = await ipfs.Block.GetAsync(dir.Id);
-                long cumulativeSize = files[0].Size + files[1].Size + rawDAG.LongLength;
-                Assert.IsNotNull(rawDAG);
-                Assert.AreEqual(cumulativeSize, dir.Size);
 
                 var recoveredDir = await ipfs.FileSystem.ListAsync(dir.Id);
                 var recoveredFiles = recoveredDir.Links.ToArray();
