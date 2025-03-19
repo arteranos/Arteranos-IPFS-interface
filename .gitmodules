@@ -1,3 +1,6 @@
 [submodule "PluginsGen~/curl"]
 	path = PluginsGen~/curl
 	url = https://github.com/curl/curl.git
+[submodule "Runtime/net-ipfs-code"]
+	path = Runtime/net-ipfs-code
+	url = git@github.com:arteranos/net-ipfs-code.git
