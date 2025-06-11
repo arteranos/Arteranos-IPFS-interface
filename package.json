@@ -1,20 +1,15 @@
 {
   "name": "com.willneedit.ipfs.iface",
-  "displayName": "IPFS RPC API interface",
+  "displayName": "Arteranos - IPFS RPC API interface",
   "version": "1.4.4",
   "unity": "2021.3",
   "description": "IPFS RPC API interface for Arteranos",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/willneedit/Arteranos-IPFS-interface.git"
-  },
   "keywords": [
     "Sample"
   ],
-  "author": "willneedit",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/willneedit/Arteranos-IPFS-interface.git"
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.0"
   },
-  "homepage": "https://github.com/willneedit/Arteranos-IPFS-interface.git#readme"
+  "author": "willneedit",
+  "license": "MIT"
 }
